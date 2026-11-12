@@ -1,67 +1,57 @@
-# 🎮 Rock Paper Scissors Game
+# luckbox
 
-A simple and interactive **Rock Paper Scissors** game built using **pure HTML, CSS, and JavaScript**.  
-Play against the computer, test your luck, and enjoy a clean, minimal UI powered by Bootstrap.
+Three games of luck that run in the browser: **Rock Paper Scissors**, **Blackjack** and **Number Guess**. No install, no build step. Just HTML, CSS and JavaScript.
 
----
+![luckbox home page](./screenshots/home.png)
 
-## 🕹️ Demo
-You can open the `index.html` file in your browser to play the game locally.  
-(No server setup required!)
+## The games
 
+| Game | How to play |
+| --- | --- |
+| [Rock Paper Scissors](./rock-paper-scissors) | Pick rock, paper or scissors. The computer picks at random and the winner is shown right away. |
+| [Blackjack](./blackjack) | Hit to draw cards, Stand to let the dealer play. Get closer to 21 than the dealer without going over. Wins, losses and draws are counted across rounds. |
+| [Number Guess](./number-guess) | The computer picks a number from 0 to 9. You get 5 tries, with a higher or lower hint after each miss. |
 
-## 🧩 Play Live
-[Rock Paper Scissors Demo](https://shahryartariq.github.io/Rock-Paper-Scissors/)
+## Screenshots
 
-Or open the `index.html` file in your browser to play locally — no server setup required!
+| Rock Paper Scissors | Number Guess |
+| --- | --- |
+| ![Rock Paper Scissors](./rock-paper-scissors/static/images/Demo/preview.png) | ![Number Guess](./screenshots/number-guess.png) |
 
----
+## Tech stack
 
-## 🚀 Features
-- 🪨 Rock, 📄 Paper, ✂️ Scissors gameplay
-- 🧠 Random computer choice
-- ⚖️ Automatic winner detection
-- 🔄 Refresh button to play again
-- 🎨 Clean and responsive Bootstrap-based design
-- 💻 100% Vanilla JavaScript (no libraries or frameworks)
+- HTML5 and CSS3
+- Vanilla JavaScript (ES6), no frameworks
+- Bootstrap 4 for the Rock Paper Scissors and Blackjack layouts
+- Sound effects in Blackjack with the Web Audio `Audio` API
 
----
+## Run it locally
 
-## 🧩 Technologies Used
-- **HTML5**
-- **CSS3**
-- **JavaScript (ES6)**
-- **Bootstrap 4**
+```bash
+git clone https://github.com/Shahryartariq/luckbox.git
+cd luckbox
+python3 -m http.server 8000
+```
 
-## 🧠 How It Works
-1. Click on **Rock**, **Paper**, or **Scissors**.
-2. The computer randomly selects one.
-3. The result is displayed showing whether you **win**, **lose**, or **tie**.
-4. Click **Refresh Page** to play again.
+Then open http://localhost:8000. You can also open `index.html` directly in a browser.
 
-## 🖼️ Screenshots
-![Game Preview](./static/images/Demo/preview.png)
+## Project structure
 
----
+```
+luckbox/
+├── index.html              # Home page that links to each game
+├── rock-paper-scissors/
+├── blackjack/
+└── number-guess/
+```
 
-## 💡 Future Enhancements
-- Add animations and sound effects  
-- Keep score between rounds  
-- Show match history or stats  
-- Make it multiplayer (local or online)
+Each game folder is self-contained with its own `index.html`, styles and script.
 
----
+## Author
 
-## 🧑‍💻 Author
-**Muhammad Shehryar Tariq**  
-Full Stack Developer | Cybersecurity Analyst  
-🌐 [Portfolio](https://shehryar-tariq.dev) | 💼 [GitHub](https://github.com/Shahryartariq)
+**Muhammad Shehryar Tariq**, full stack developer
+[Portfolio](https://shehryar-tariq.dev) · [GitHub](https://github.com/Shahryartariq)
 
----
+## License
 
-## 📜 License
-This project is licensed under the **MIT License** — free to use and modify.
-
----
-
-⭐ **If you like this project, give it a star on GitHub!**
+MIT. See [LICENSE](./LICENSE).
