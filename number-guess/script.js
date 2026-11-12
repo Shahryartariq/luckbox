@@ -34,19 +34,19 @@ function guess(value) {
   attemptsEl.textContent = `Attempts left: ${attemptsLeft}`;
 
   if (value === secret) {
-    endGame(`You win! It was ${secret}.`, "text-success");
+    endGame(`You win! It was ${secret}.`, "win");
   } else if (attemptsLeft === 0) {
-    endGame(`Out of attempts. It was ${secret}.`, "text-danger");
+    endGame(`Out of attempts. It was ${secret}.`, "lose");
   } else {
     const hint = value < secret ? "higher" : "lower";
     resultEl.textContent = `Not ${value}. Try ${hint}.`;
-    resultEl.className = "mainHeading text-danger";
+    resultEl.className = "mainHeading lose";
   }
 }
 
 for (let i = 0; i <= 9; i++) {
   const btn = document.createElement("button");
-  btn.className = "btn btn-primary myButton";
+  btn.className = "myButton";
   btn.textContent = i;
   btn.addEventListener("click", () => {
     btn.disabled = true;
