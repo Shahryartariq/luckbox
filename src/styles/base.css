@@ -1,0 +1,625 @@
+/* luckbox design tokens and shared components.
+   Idea: every game is a raffle ticket on a cobalt counter. Ticket colours mark each game;
+   the perforated stub holds your stats. */
+
+:root {
+  --cobalt: #2340d8;
+  --cobalt-deep: #1a2fa6;
+  --ink: #141a3a;
+  --ink-soft: #4a5078;
+  --paper: #fbfbff;
+  --line: #d9dcef;
+
+  --sun: #ffd23f;
+  --pink: #ff9ec0;
+  --mint: #82e3ba;
+  --sky: #9ccbff;
+  --lilac: #cdbbff;
+  --peach: #ffbe8a;
+
+  --win: #0a7a4b;
+  --lose: #c81e35;
+  --push: #5b6085;
+
+  --accent: var(--sun);
+
+  --font-display: "Bungee", "Arial Black", sans-serif;
+  --font-body: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+
+  --radius-ticket: 18px;
+  --radius-btn: 12px;
+  --gap: clamp(1rem, 2.5vw, 1.5rem);
+  --notch: 13px;
+
+  color-scheme: light;
+}
+
+body[data-color="sun"] { --accent: var(--sun); }
+body[data-color="pink"] { --accent: var(--pink); }
+body[data-color="mint"] { --accent: var(--mint); }
+body[data-color="sky"] { --accent: var(--sky); }
+body[data-color="lilac"] { --accent: var(--lilac); }
+body[data-color="peach"] { --accent: var(--peach); }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cobalt);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.table :focus-visible,
+.howto :focus-visible {
+  outline-color: var(--ink);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--sun);
+  color: var(--ink);
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.skip:focus {
+  top: 1rem;
+}
+
+/* ---------- Top bar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1.25rem var(--gap);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.wordmark:hover {
+  color: var(--sun);
+}
+
+.chip {
+  border: 2px solid rgb(255 255 255 / 0.55);
+  background: transparent;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: #fff;
+}
+
+.chip[aria-pressed="false"] {
+  color: rgb(255 255 255 / 0.75);
+  border-style: dashed;
+}
+
+/* ---------- Game page ---------- */
+
+.game {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0.5rem var(--gap) 4rem;
+}
+
+.game__head {
+  margin: 1rem 0 1.75rem;
+  max-width: 44rem;
+}
+
+.game__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  line-height: 0.95;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.game__lede {
+  margin-top: 0.85rem;
+  font-size: 1.125rem;
+  color: rgb(255 255 255 / 0.88);
+  max-width: 38rem;
+}
+
+/* The ticket: play area on paper, stats on a perforated stub in the game colour. */
+.table {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: var(--radius-ticket);
+  box-shadow: 0 18px 40px -18px rgb(8 14 60 / 0.6);
+}
+
+.table__play {
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.table__stub {
+  position: relative;
+  background: var(--accent);
+  border-radius: 0 var(--radius-ticket) var(--radius-ticket) 0;
+  border-left: 3px dashed rgb(20 26 58 / 0.35);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Notches where the stub tears off. */
+.table__stub::before,
+.table__stub::after {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--notch) - 1.5px);
+  width: calc(var(--notch) * 2);
+  height: calc(var(--notch) * 2);
+  border-radius: 50%;
+  background: var(--cobalt);
+}
+
+.table__stub::before {
+  top: calc(-1 * var(--notch));
+}
+
+.table__stub::after {
+  bottom: calc(-1 * var(--notch));
+}
+
+.stub__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 0.75rem;
+}
+
+.stat dt {
+  font-size: 0.875rem;
+  color: rgb(20 26 58 / 0.78);
+}
+
+.stat dd {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat dd.stat__text {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.link-btn {
+  margin-top: auto;
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0.25rem 0;
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .table {
+    grid-template-columns: 1fr;
+  }
+
+  .table__stub {
+    border-left: none;
+    border-top: 3px dashed rgb(20 26 58 / 0.35);
+    border-radius: 0 0 var(--radius-ticket) var(--radius-ticket);
+  }
+
+  .table__stub::before,
+  .table__stub::after {
+    top: calc(-1 * var(--notch) - 1.5px);
+    bottom: auto;
+  }
+
+  .table__stub::before {
+    left: calc(-1 * var(--notch));
+  }
+
+  .table__stub::after {
+    left: auto;
+    right: calc(-1 * var(--notch));
+  }
+
+  .stats {
+    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  }
+}
+
+/* ---------- Status line ---------- */
+
+.status {
+  min-height: 1.35em;
+  font-weight: 700;
+  font-size: clamp(1.1875rem, 2.6vw, 1.4375rem);
+  line-height: 1.3;
+  color: var(--ink);
+  max-width: 40rem;
+}
+
+.status[data-tone="win"] {
+  color: var(--win);
+}
+
+.status[data-tone="lose"] {
+  color: var(--lose);
+}
+
+.status[data-tone="push"] {
+  color: var(--push);
+}
+
+/* ---------- Buttons ---------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn {
+  --btn-bg: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.6rem 1.3rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-btn);
+  background: var(--btn-bg);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  box-shadow: 0 4px 0 var(--ink);
+  cursor: pointer;
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease,
+    background-color 120ms ease;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--btn-bg) 85%, var(--ink));
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  box-shadow: 0 2px 0 var(--ink);
+}
+
+.btn--primary {
+  --btn-bg: var(--accent);
+}
+
+.btn--ink {
+  --btn-bg: var(--ink);
+  color: #fff;
+}
+
+.btn--ink:hover:not(:disabled) {
+  background: #2a3266;
+}
+
+.btn kbd {
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1.5px solid currentColor;
+  border-radius: 5px;
+  padding: 0 0.3rem;
+  opacity: 0.65;
+}
+
+@media (hover: none) {
+  .btn kbd {
+    display: none;
+  }
+}
+
+/* Segmented choice (difficulty, mines count, bet size). */
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+}
+
+.segmented button {
+  border: none;
+  border-right: 2px solid var(--ink);
+  background: var(--paper);
+  padding: 0.45rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 2.5rem;
+}
+
+.segmented button:last-child {
+  border-right: none;
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+.segmented button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.segmented button:focus-visible {
+  outline-offset: -5px;
+  outline-color: var(--sun);
+}
+
+.field-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- Playing cards ---------- */
+
+.card {
+  position: relative;
+  flex: none;
+  width: clamp(58px, 15vw, 82px);
+  aspect-ratio: 5 / 7;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 3px 0 var(--ink);
+}
+
+.card--red {
+  color: var(--lose);
+}
+
+.card__corner {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.4rem;
+  font-size: clamp(0.8rem, 2.6vw, 1rem);
+  line-height: 1;
+  text-align: center;
+}
+
+.card__corner--flip {
+  top: auto;
+  left: auto;
+  bottom: 0.3rem;
+  right: 0.4rem;
+  transform: rotate(180deg);
+}
+
+.card__pip {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+}
+
+.card--back {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 6px, rgb(255 255 255 / 0.18) 6px 8px),
+    repeating-linear-gradient(-45deg, transparent 0 6px, rgb(255 255 255 / 0.18) 6px 8px),
+    var(--cobalt);
+}
+
+.card--deal {
+  animation: deal 260ms cubic-bezier(0.2, 0.8, 0.3, 1.2) both;
+}
+
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateY(-24px) rotate(-8deg);
+  }
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: calc(clamp(58px, 15vw, 82px) * 1.4 + 3px);
+}
+
+/* Empty hands show where the cards will land. */
+.hand:empty::before,
+.hand:empty::after {
+  content: "";
+  width: clamp(58px, 15vw, 82px);
+  aspect-ratio: 5 / 7;
+  border: 2px dashed rgb(255 255 255 / 0.45);
+  border-radius: 10px;
+}
+
+/* ---------- How to play + more games ---------- */
+
+.howto {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 40rem);
+  gap: 0.75rem;
+}
+
+.howto h2,
+.more h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+
+.howto ul {
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.35rem;
+  color: rgb(255 255 255 / 0.9);
+}
+
+.howto .keys {
+  color: rgb(255 255 255 / 0.8);
+  font-size: 0.9375rem;
+}
+
+.more {
+  margin-top: 2.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.more ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.more a {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--chip, var(--sun));
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.more a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.more a[data-color="sun"] { --chip: var(--sun); }
+.more a[data-color="pink"] { --chip: var(--pink); }
+.more a[data-color="mint"] { --chip: var(--mint); }
+.more a[data-color="sky"] { --chip: var(--sky); }
+.more a[data-color="lilac"] { --chip: var(--lilac); }
+.more a[data-color="peach"] { --chip: var(--peach); }
+
+.site-footer {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem var(--gap) 3rem;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 0.9375rem;
+}
+
+.site-footer a {
+  text-underline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
