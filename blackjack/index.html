@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blackjack | luckbox</title>
+    <meta name="description" content="Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="https://playluckbox.vercel.app/blackjack/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="Blackjack | luckbox">
+    <meta property="og:description" content="Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.">
+    <meta property="og:url" content="https://playluckbox.vercel.app/blackjack/">
+    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/blackjack/main.ts"></script>
+  </head>
+  <body data-color="mint">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">Blackjack</h1>
+        <p class="game__lede">Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.</p>
+      </div>
+      <section class="table" aria-label="Blackjack table">
+        <div class="table__play" id="play">
+      <div class="bj-row">
+        <div class="bj-side">
+          <h2 class="bj-label">Dealer <span id="dealer-total" class="bj-total"></span></h2>
+          <div id="dealer-hand" class="hand" aria-live="polite"></div>
+        </div>
+        <div class="bj-side">
+          <h2 class="bj-label">You <span id="player-total" class="bj-total"></span></h2>
+          <div id="player-hand" class="hand" aria-live="polite"></div>
+        </div>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="bj-bet">
+        <span class="field-label" id="bet-label">Bet</span>
+        <div id="bets" class="segmented" role="group" aria-labelledby="bet-label"></div>
+        <span class="bj-chips">Chips: <strong id="chips">100</strong></span>
+      </div>
+      <div class="controls">
+        <button id="deal" class="btn btn--primary" type="button">Deal <kbd>N</kbd></button>
+        <button id="hit" class="btn" type="button" disabled>Hit <kbd>H</kbd></button>
+        <button id="stand" class="btn" type="button" disabled>Stand <kbd>S</kbd></button>
+        <button id="double" class="btn" type="button" disabled>Double <kbd>D</kbd></button>
+        <button id="refill" class="btn btn--ink" type="button" hidden>Refill to 100 chips</button>
+      </div>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Pick a bet and deal. Cards are worth their number, faces are 10 and aces are 1 or 11.</li>
+          <li>Hit to take a card, stand to keep your total. Double doubles your bet for exactly one more card.</li>
+          <li>The dealer draws to 17 and stands on all 17s. Blackjack pays 3 to 2.</li>
+          <li>Four decks are shuffled together and reshuffled when the shoe runs low. Your chips are saved in this browser.</li>
+        </ul>
+        <p class="keys">Keyboard: N deal, H hit, S stand, D double.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/pig/" data-color="peach">Pig</a></li>
+          <li><a href="/rock-paper-scissors/" data-color="sky">Rock Paper Scissors</a></li>
+          <li><a href="/number-guess/" data-color="lilac">Number Guess</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
+</html>

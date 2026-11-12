@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rock Paper Scissors | luckbox</title>
+    <meta name="description" content="The classic, played first to three against a computer that picks at random. No tricks.">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="https://playluckbox.vercel.app/rock-paper-scissors/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="Rock Paper Scissors | luckbox">
+    <meta property="og:description" content="The classic, played first to three against a computer that picks at random. No tricks.">
+    <meta property="og:url" content="https://playluckbox.vercel.app/rock-paper-scissors/">
+    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/rock-paper-scissors/main.ts"></script>
+  </head>
+  <body data-color="sky">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">Rock Paper Scissors</h1>
+        <p class="game__lede">The classic, played first to three against a computer that picks at random. No tricks.</p>
+      </div>
+      <section class="table" aria-label="Rock Paper Scissors table">
+        <div class="table__play" id="play">
+      <div class="rps-arena">
+        <div class="rps-side">
+          <h2 class="rps-name">You</h2>
+          <div id="you-hand" class="rps-hand" role="img" aria-label="Waiting for your move">✊</div>
+        </div>
+        <p class="rps-score" aria-live="polite"><span id="you-score">0</span><span class="rps-dash">–</span><span id="cpu-score">0</span></p>
+        <div class="rps-side">
+          <h2 class="rps-name">Computer</h2>
+          <div id="cpu-hand" class="rps-hand rps-hand--cpu" role="img" aria-label="Waiting">✊</div>
+        </div>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="controls" id="moves">
+        <button class="btn btn--primary" type="button" data-move="rock">✊ Rock <kbd>R</kbd></button>
+        <button class="btn btn--primary" type="button" data-move="paper">✋ Paper <kbd>P</kbd></button>
+        <button class="btn btn--primary" type="button" data-move="scissors">✌️ Scissors <kbd>S</kbd></button>
+        <button id="again" class="btn btn--ink" type="button" hidden>New match <kbd>N</kbd></button>
+      </div>
+      <ol id="log" class="rps-log" aria-label="Rounds in this match"></ol>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Rock beats scissors, scissors beats paper, paper beats rock.</li>
+          <li>First to win three rounds takes the match. Draws don&#x27;t count.</li>
+          <li>The computer picks at random with the browser&#x27;s secure random generator.</li>
+        </ul>
+        <p class="keys">Keyboard: R rock, P paper, S scissors, N new match.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/blackjack/" data-color="mint">Blackjack</a></li>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/pig/" data-color="peach">Pig</a></li>
+          <li><a href="/number-guess/" data-color="lilac">Number Guess</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
+</html>
