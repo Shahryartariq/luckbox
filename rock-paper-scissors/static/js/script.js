@@ -1,16 +1,13 @@
-console.log('connected');
-
 function rpsGame(yourChoice) {
   //console.log(yourChoice);
-  var humanChoice, botChoice;
-  humanChoice = yourChoice.id;
+  var humanChoice = yourChoice.id;
   var botChoice = numberToChoice(randomInt());
 
   // var refresh = document.getElementById('refrest_div');
   // refresh.innerHTML = "<button onClick='window.location.reload();' class='btn-success mybtn'>Refresh Page</button>"
   // // console.log(humanChoice + '\n' + botChoice);
-  results = decideWinner(humanChoice, botChoice);
-  message = finalmessage(results[0]);
+  var results = decideWinner(humanChoice, botChoice);
+  var message = finalmessage(results[0]);
   // console.log(message);
   rpsFrontEnd(yourChoice, botChoice, message);
 }
@@ -41,7 +38,7 @@ function finalmessage(yourScore) {
     return { 'message': 'You Lost!', 'color': 'red' };
   }
   else if (yourScore === 0.5) {
-    return { 'message': 'You Tied!', 'color': 'yellow' };
+    return { 'message': 'You Tied!', 'color': '#e0a800' };
   }
   else {
     return { 'message': 'You Won!', 'color': 'Green' };
@@ -71,7 +68,6 @@ function rpsFrontEnd(yourChoice, botChoice, message) {
 
   // console.log(temp);
   //console.log(temp1);
-  console.log(message['color']);
 
   humanDiv.innerHTML = "<img src='" + temp + "' height=150 width=150 style='box-shadow: 0px 10px 50px rgba(37, 50, 233, 1)' >";
 

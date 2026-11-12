@@ -24,3 +24,7 @@
   padding: 10px 30px;
   font-size: 22px;
 }
+.back-link {
+  display: inline-block;
+  margin: 15px;
+}
