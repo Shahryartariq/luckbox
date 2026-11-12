@@ -1,0 +1,110 @@
+.mines-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mines-meter {
+  display: grid;
+  justify-items: end;
+  text-align: right;
+}
+
+.mines-meter__now {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 3rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.mines-meter__next {
+  min-height: 1.4em;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+.mines-grid {
+  display: grid;
+  gap: clamp(0.4rem, 1.4vw, 0.65rem);
+  width: min(100%, 26rem);
+}
+
+.mines-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(0.4rem, 1.4vw, 0.65rem);
+}
+
+.tile {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  background: var(--accent);
+  box-shadow: 0 4px 0 var(--ink);
+  font-size: clamp(1.25rem, 5vw, 1.75rem);
+  cursor: pointer;
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease,
+    background-color 150ms ease;
+}
+
+.tile:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 80%, var(--ink));
+}
+
+.tile:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.tile:disabled {
+  cursor: default;
+}
+
+.tile[data-state="gem"] {
+  background: #fff;
+  color: var(--win);
+  box-shadow: 0 1px 0 var(--ink);
+  transform: translateY(3px);
+  animation: tile-pop 220ms ease-out;
+}
+
+.tile[data-state="mine"] {
+  background: #fff;
+  color: var(--lose);
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.tile[data-state="boom"] {
+  background: var(--lose);
+  color: #fff;
+  box-shadow: none;
+  transform: translateY(3px);
+}
+
+.tile[data-state="dim"] {
+  opacity: 0.35;
+  box-shadow: none;
+}
+
+.mines-grid.shake {
+  animation: grid-shake 360ms ease;
+}
+
+@keyframes tile-pop {
+  50% {
+    transform: translateY(3px) scale(1.08);
+  }
+}
+
+@keyframes grid-shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}

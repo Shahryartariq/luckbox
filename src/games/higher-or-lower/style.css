@@ -1,0 +1,98 @@
+.hl-board {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.hl-card-slot .card {
+  width: clamp(96px, 26vw, 132px);
+}
+
+.hl-card-slot .card__pip {
+  font-size: clamp(2.5rem, 9vw, 3.5rem);
+}
+
+.hl-card-slot .card__corner {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+}
+
+.hl-left {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  max-width: 9rem;
+}
+
+.hl-odds {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.hl-odd {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) 3.5rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hl-odd__label {
+  font-weight: 700;
+}
+
+.hl-odd__bar {
+  height: 1.1rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.hl-odd__bar span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width 300ms ease;
+}
+
+.hl-odd__value {
+  font-family: var(--font-display);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.hl-trail {
+  display: flex;
+  gap: 0;
+  overflow: hidden;
+}
+
+.hl-trail .card {
+  width: 46px;
+  box-shadow: none;
+  margin-right: -14px;
+}
+
+.hl-trail .card__pip {
+  font-size: 1.1rem;
+}
+
+.hl-trail .card__corner {
+  font-size: 0.7rem;
+}
+
+.hl-trail .card__corner--flip {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .hl-board {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .hl-board .hl-odds {
+    width: 100%;
+  }
+}

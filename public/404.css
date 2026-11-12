@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #2340d8;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: clamp(3rem, 12vw, 6rem);
+  margin: 0 0 1rem;
+  color: #ffd23f;
+  text-shadow: 0.05em 0.05em 0 #141a3a;
+}
+
+a {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.4rem;
+  border: 2px solid #141a3a;
+  border-radius: 12px;
+  background: #ffd23f;
+  color: #141a3a;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 0 #141a3a;
+}

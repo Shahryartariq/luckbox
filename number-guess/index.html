@@ -1,27 +1,87 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Number Guess | luckbox</title>
-</head>
-<body>
-  <a href="../" class="back-link">&larr; luckbox</a>
-
-  <h1 class="mainHeading">Guess the Number</h1>
-  <p class="subtitle">I picked a number from 0 to 9. You have 5 tries.</p>
-  <hr>
-
-  <div class="btnContainer" id="buttons"></div>
-
-  <p class="attempts" id="attempts">Attempts left: 5</p>
-  <h2 class="mainHeading" id="result"></h2>
-
-  <div class="actions">
-    <button class="myButton play-again" id="playAgain" hidden>Play again</button>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Number Guess | luckbox</title>
+    <meta name="description" content="Find the secret number with as few guesses as you can. Each miss narrows the range.">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="https://playluckbox.vercel.app/number-guess/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="Number Guess | luckbox">
+    <meta property="og:description" content="Find the secret number with as few guesses as you can. Each miss narrows the range.">
+    <meta property="og:url" content="https://playluckbox.vercel.app/number-guess/">
+    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/number-guess/main.ts"></script>
+  </head>
+  <body data-color="lilac">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">Number Guess</h1>
+        <p class="game__lede">Find the secret number with as few guesses as you can. Each miss narrows the range.</p>
+      </div>
+      <section class="table" aria-label="Number Guess table">
+        <div class="table__play" id="play">
+      <div>
+        <span class="field-label" id="level-label">Difficulty</span>
+        <div id="levels" class="segmented" role="group" aria-labelledby="level-label"></div>
+      </div>
+      <form id="guess-form" class="ng-form" novalidate>
+        <label class="field-label" for="guess-input">Your guess (<span id="range-text">1 to 100</span>)</label>
+        <div class="ng-row">
+          <input id="guess-input" class="ng-input" type="number" inputmode="numeric" min="1" step="1" autocomplete="off" required>
+          <button id="guess-btn" class="btn btn--primary" type="submit">Guess</button>
+        </div>
+        <p id="input-error" class="ng-error" aria-live="polite"></p>
+      </form>
+      <div class="ng-range" aria-hidden="true">
+        <div class="ng-track"><span id="ng-window"></span></div>
+        <div class="ng-ends"><span id="ng-min">1</span><span id="ng-max">100</span></div>
+      </div>
+      <p class="ng-info">Still possible: <strong id="possible">1 to 100</strong>. Tries left: <strong id="tries-left">7</strong></p>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <ol id="history" class="ng-history" aria-label="Your guesses"></ol>
+      <div class="controls">
+        <button id="again" class="btn btn--ink" type="button">New number <kbd>N</kbd></button>
+      </div>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Pick a difficulty and guess the secret number.</li>
+          <li>After each miss you are told to go higher or lower, and the bar shows what is still possible.</li>
+          <li>A perfect player always halves the range. Can you match that?</li>
+        </ul>
+        <p class="keys">Keyboard: Type a number and press Enter. N for a new number.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/blackjack/" data-color="mint">Blackjack</a></li>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/pig/" data-color="peach">Pig</a></li>
+          <li><a href="/rock-paper-scissors/" data-color="sky">Rock Paper Scissors</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
 </html>

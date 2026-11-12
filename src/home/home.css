@@ -1,0 +1,161 @@
+.hero {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 5vw, 3.5rem) var(--gap) clamp(2rem, 5vw, 3.5rem);
+}
+
+/* The wordmark is the page's one loud element: signage type with a hard ink shadow. */
+.hero__title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.25rem, 17vw, 11rem);
+  line-height: 0.9;
+  color: var(--sun);
+  text-shadow: 0.05em 0.05em 0 var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.hero__lede {
+  margin-top: 1.5rem;
+  max-width: 34rem;
+  font-size: clamp(1.125rem, 2.2vw, 1.3125rem);
+  color: rgb(255 255 255 / 0.92);
+}
+
+.tickets {
+  list-style: none;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--gap) 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 30rem), 1fr));
+  gap: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.ticket {
+  --t: var(--sun);
+  --tilt: -1deg;
+}
+
+.ticket[data-color="sun"] { --t: var(--sun); }
+.ticket[data-color="pink"] { --t: var(--pink); }
+.ticket[data-color="mint"] { --t: var(--mint); }
+.ticket[data-color="sky"] { --t: var(--sky); }
+.ticket[data-color="lilac"] { --t: var(--lilac); }
+.ticket[data-color="peach"] { --t: var(--peach); }
+
+.ticket:nth-child(2n) { --tilt: 0.8deg; }
+.ticket:nth-child(3n) { --tilt: -0.5deg; }
+.ticket:nth-child(5n) { --tilt: 1.2deg; }
+
+.ticket__link {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 8.5rem;
+  min-height: 11rem;
+  border-radius: var(--radius-ticket);
+  background: var(--t);
+  color: var(--ink);
+  text-decoration: none;
+  transform: rotate(var(--tilt));
+  box-shadow: 0 6px 0 var(--ink);
+  border: 2px solid var(--ink);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.ticket__link:hover,
+.ticket__link:focus-visible {
+  transform: rotate(0) translateY(-4px);
+  box-shadow: 0 10px 0 var(--ink);
+}
+
+.ticket__link:active {
+  transform: rotate(0) translateY(2px);
+  box-shadow: 0 3px 0 var(--ink);
+}
+
+.ticket__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.4rem 1.4rem 1.5rem;
+}
+
+.ticket__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+  line-height: 1;
+}
+
+.ticket__blurb {
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 30ch;
+}
+
+.ticket__stub {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem 1rem;
+  border-left: 3px dashed rgb(20 26 58 / 0.4);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: rgb(20 26 58 / 0.75);
+}
+
+.ticket__stub[data-played="true"] {
+  color: var(--ink);
+}
+
+/* Punched notches at both ends of the perforation. */
+.ticket__stub::before,
+.ticket__stub::after {
+  content: "";
+  position: absolute;
+  left: -14px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--cobalt);
+  border: 2px solid var(--ink);
+}
+
+.ticket__stub::before {
+  top: -14px;
+  clip-path: inset(50% 0 0 0);
+}
+
+.ticket__stub::after {
+  bottom: -14px;
+  clip-path: inset(0 0 50% 0);
+}
+
+@media (max-width: 520px) {
+  .ticket__link {
+    grid-template-columns: minmax(0, 1fr) 6.5rem;
+    min-height: 0;
+  }
+
+  .ticket__body {
+    padding: 1.1rem 1rem 1.2rem;
+  }
+
+  .ticket__blurb {
+    font-size: 0.9375rem;
+  }
+
+  .ticket__stub {
+    padding: 1rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticket__link {
+    transform: none;
+  }
+}

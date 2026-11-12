@@ -1,0 +1,118 @@
+.ng-form {
+  max-width: 26rem;
+}
+
+.ng-row {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.ng-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 3rem;
+  padding: 0.5rem 0.9rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-btn);
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.ng-input:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.ng-input[aria-invalid="true"] {
+  border-color: var(--lose);
+}
+
+.ng-error {
+  min-height: 1.4em;
+  margin-top: 0.35rem;
+  color: var(--lose);
+  font-weight: 700;
+  font-size: 0.9375rem;
+}
+
+.ng-track {
+  position: relative;
+  height: 1.25rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: repeating-linear-gradient(90deg, #eceefa 0 6px, #fff 6px 12px);
+  overflow: hidden;
+}
+
+#ng-window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--accent);
+  border-left: 2px solid var(--ink);
+  border-right: 2px solid var(--ink);
+  transition:
+    left 300ms ease,
+    width 300ms ease;
+}
+
+#ng-window[data-state="won"] {
+  background: var(--mint);
+}
+
+#ng-window[data-state="lost"] {
+  background: #ffd5db;
+}
+
+.ng-ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.ng-info {
+  color: var(--ink-soft);
+}
+
+.ng-info strong {
+  color: var(--ink);
+}
+
+.ng-history {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ng-history li {
+  padding: 0.2rem 0.65rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ng-history li[data-result="correct"] {
+  background: var(--mint);
+}
+
+.ng-history:empty {
+  display: none;
+}
+
+.ng-input::-webkit-outer-spin-button,
+.ng-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ng-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
