@@ -27,7 +27,7 @@ for (const path of GAME_PATHS) {
 }
 
 test("sound setting is remembered", async ({ page }) => {
-  await page.goto("/pig/");
+  await page.goto("/mines/");
   const toggle = page.locator("#sound-toggle");
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await toggle.click();
@@ -46,7 +46,7 @@ test("stats show up on the home page ticket after playing", async ({ page }) => 
   await expect(page.locator("#again")).toBeVisible();
   await page.goto("/");
   await expect(page.locator('[data-stat="rock-paper-scissors"]')).toHaveText(/matches won/);
-  await expect(page.locator('[data-stat="pig"]')).toHaveText("Not played yet");
+  await expect(page.locator('[data-stat="sudoku"]')).toHaveText("Not played yet");
 });
 
 test("reset stats needs two clicks", async ({ page }) => {

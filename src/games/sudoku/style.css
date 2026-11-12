@@ -1,0 +1,233 @@
+.sd-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sd-timer {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.sd-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 30rem) minmax(11rem, 14rem);
+  align-items: start;
+  gap: clamp(1rem, 3vw, 2rem);
+}
+
+.sd-board {
+  display: grid;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ink);
+  gap: 1px;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.sd-row {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 1px;
+}
+
+.sd-gridcell {
+  display: contents;
+}
+
+.sd-cell {
+  position: relative;
+  min-width: 0;
+  aspect-ratio: 1;
+  border: none;
+  padding: 0;
+  background: #fff;
+  color: #1f4fd8;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 4.6vw, 1.75rem);
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+/* Thicker lines between the 3x3 boxes. */
+.sd-cell--box-right {
+  box-shadow: 2px 0 0 var(--ink);
+  z-index: 1;
+}
+
+.sd-cell--box-bottom {
+  box-shadow: 0 2px 0 var(--ink);
+  z-index: 1;
+}
+
+.sd-cell--box-right.sd-cell--box-bottom {
+  box-shadow:
+    2px 0 0 var(--ink),
+    0 2px 0 var(--ink),
+    2px 2px 0 var(--ink);
+}
+
+.sd-cell.is-given {
+  color: var(--ink);
+}
+
+.sd-cell.is-peer {
+  background: color-mix(in srgb, var(--accent) 22%, #fff);
+}
+
+.sd-cell.is-same {
+  background: color-mix(in srgb, var(--accent) 60%, #fff);
+}
+
+.sd-cell.is-selected {
+  background: var(--accent);
+}
+
+.sd-cell.is-conflict {
+  color: var(--lose);
+  background-image: repeating-linear-gradient(-45deg, transparent 0 5px, rgb(200 30 53 / 0.12) 5px 7px);
+}
+
+.sd-cell:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -3px;
+  z-index: 2;
+}
+
+.sd-board[data-done="true"] .sd-cell {
+  background: color-mix(in srgb, var(--mint) 45%, #fff);
+  cursor: default;
+}
+
+.sd-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+  padding: 8%;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(0.45rem, 1.5vw, 0.7rem);
+  color: var(--ink-soft);
+}
+
+.sd-notes span {
+  display: grid;
+  place-items: center;
+}
+
+.sd-side {
+  display: grid;
+  gap: 1rem;
+}
+
+.sd-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.sd-key {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.45rem 0 0.35rem;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-btn);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 3px 0 var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sd-key:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 45%, #fff);
+}
+
+.sd-key:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+.sd-key:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sd-key__n {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.sd-key__left {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.sd-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.sd-tools .btn {
+  min-height: 2.75rem;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9375rem;
+}
+
+#notes[aria-pressed="true"] {
+  background: var(--ink);
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .sd-tools kbd {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .sd-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sd-board {
+    max-width: 32rem;
+  }
+
+  .sd-pad {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 0.25rem;
+    max-width: 32rem;
+  }
+
+  .sd-key {
+    min-width: 0;
+    padding: 0.35rem 0 0.25rem;
+    border-radius: 8px;
+  }
+
+  .sd-key__n {
+    font-size: 1.2rem;
+  }
+
+  .sd-tools {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 32rem;
+  }
+
+  .sd-tools .btn {
+    padding: 0.4rem 0.3rem;
+  }
+}

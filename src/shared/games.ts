@@ -33,11 +33,11 @@ export const GAMES: readonly GameInfo[] = [
     keys: "Up higher, Down lower",
   },
   {
-    slug: "pig",
-    name: "Pig",
-    blurb: "Roll the die and bank your points before a 1 wipes them out. First to 50 beats the computer.",
+    slug: "sudoku",
+    name: "Sudoku",
+    blurb: "The one game here where luck can't help you. Fresh puzzles every time, each with exactly one solution.",
     color: "peach",
-    keys: "R roll, B bank",
+    keys: "Arrows move, 1 to 9 place, N notes",
   },
   {
     slug: "rock-paper-scissors",

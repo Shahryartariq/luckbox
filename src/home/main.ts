@@ -21,9 +21,13 @@ const lines: Record<string, () => string | null> = {
     const s = load("higher-or-lower", { bestStreak: 0, runs: 0, rightCalls: 0 });
     return s.runs === 0 && s.rightCalls === 0 ? null : `Best streak ${s.bestStreak}`;
   },
-  pig: () => {
-    const s = load("pig", { wins: 0, losses: 0 });
-    return s.wins + s.losses === 0 ? null : `${plural(s.wins, "win")}, ${plural(s.losses, "loss", "losses")}`;
+  sudoku: () => {
+    const s = load("sudoku", { solved: 0, bestEasy: 0, bestMedium: 0, bestHard: 0 });
+    if (s.solved === 0) return null;
+    const best = s.bestHard ? ["hard", s.bestHard] : s.bestMedium ? ["medium", s.bestMedium] : s.bestEasy ? ["easy", s.bestEasy] : null;
+    if (!best) return `${s.solved} solved`;
+    const secs = Number(best[1]);
+    return `${s.solved} solved, best ${best[0]} ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
   },
   "rock-paper-scissors": () => {
     const s = load("rock-paper-scissors", { matchesWon: 0, matchesLost: 0 });
