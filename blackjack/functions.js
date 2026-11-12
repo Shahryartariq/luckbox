@@ -1,6 +1,4 @@
-console.log("Working Fine 😊");
-
-// Asaani ka liye banaya haa
+// Game state
 let blackjackGame = {
   you: {
     scoreSpan: "#yourBlackjackResult",
@@ -12,7 +10,7 @@ let blackjackGame = {
     div: "#DealerBox",
     score: 0,
   },
-  card: ["2", "3", "4", "5", "6", "7", "8", "9", "K", "Q", "J", "A"],
+  card: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "K", "Q", "J", "A"],
   cardMap: {
     2: 2,
     3: 3,
@@ -66,7 +64,7 @@ function blackjackHit() {
 }
 
 function randomCard() {
-  let randomIndex = Math.floor(Math.random() * 12);
+  let randomIndex = Math.floor(Math.random() * blackjackGame["card"].length);
   // console.log("randomIndex: ", randomIndex);
   return blackjackGame["card"][randomIndex];
 }
@@ -90,10 +88,10 @@ function blackjackDeal() {
       .querySelector("#DealerBox")
       .querySelectorAll("img");
     // console.log(yourImages);
-    for (item of yourImages) {
+    for (const item of yourImages) {
       item.remove();
     }
-    for (item of DealerImages) {
+    for (const item of DealerImages) {
       item.remove();
     }
     YOU["score"] = 0;
@@ -108,7 +106,7 @@ function blackjackDeal() {
     document.querySelector("#blackjackResult").textContent = "Lets Play";
     document.querySelector("#blackjackResult").style.color = "#000000";
 
-    blackjackGame["turnsOver"] = true;
+    blackjackGame["turnsOver"] = false;
   }
 }
 
@@ -140,9 +138,11 @@ function sleep(ms) {
 }
 
 async function dealerLogic() {
+  // Ignore extra clicks while the dealer is already playing
+  if (blackjackGame["isStand"] === true) return;
   blackjackGame["isStand"] = true;
   if (document.getElementById("blackjackResult").innerText === "Lets Play") {
-    while (DEALER["score"] < 16 && blackjackGame["isStand"] === true) {
+    while (DEALER["score"] < 17 && blackjackGame["isStand"] === true) {
       let dealerCard = randomCard();
       showCard(dealerCard, DEALER);
       updateScore(dealerCard, DEALER);
@@ -150,11 +150,10 @@ async function dealerLogic() {
       await sleep(1000);
     }
 
-    if (DEALER["score"] > 15) {
+    if (DEALER["score"] >= 17) {
       blackjackGame["turnsOver"] = true;
       let winner = computeWinner();
       showResult(winner);
-      console.log("turnsOver: ", blackjackGame["turnsOver"]);
     }
   }
 }
@@ -165,7 +164,6 @@ function computeWinner() {
   if (YOU["score"] <= 21) {
     // when high score than dealer or dealer busts
     if (YOU["score"] > DEALER["score"] || DEALER["score"] > 21) {
-      console.log("You Won!");
       blackjackGame["wins"]++;
       winner = YOU;
     } else if (YOU["score"] < DEALER["score"]) {
@@ -189,7 +187,6 @@ function computeWinner() {
     // console.log("You Drew!");
     blackjackGame["draws"]++;
   }
-  console.log(blackjackGame);
   return winner;
 }
 

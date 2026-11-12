@@ -52,3 +52,8 @@ table, th, td{
   /* border: 1px solid black; */
   padding: 10px;
 }
+
+.back-link {
+  display: inline-block;
+  margin: 15px;
+}
