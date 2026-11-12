@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Mulish&display=swap");
+
+body {
+  font-family: "Mulish", sans-serif;
+  padding: 20px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.mainHeading {
+  text-align: center;
+  margin: 15px auto;
+}
+
+.btnContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.myButton {
+  margin: 8px;
+  min-width: 56px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+}
+
+.attempts {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
