@@ -1,6 +1,6 @@
 # luckbox
 
-Six quick browser games of luck and nerve: **Blackjack**, **Mines**, **Higher or Lower**, **Pig**, **Rock Paper Scissors** and **Number Guess**. Free, no sign-up, and your records stay in your browser.
+Six quick browser games: five of luck (**Blackjack**, **Mines**, **Higher or Lower**, **Rock Paper Scissors** and **Number Guess**) and one of pure logic (**Sudoku**). Free, no sign-up, and your records stay in your browser.
 
 **Play it:** https://playluckbox.vercel.app
 
@@ -13,7 +13,7 @@ Six quick browser games of luck and nerve: **Blackjack**, **Mines**, **Higher or
 | **Blackjack** | Bet, then hit, stand or double down against a dealer who stands on 17. Four-deck shoe, blackjack pays 3 to 2, chips carry over between visits. |
 | **Mines** | Flip tiles on a 5×5 board with 3, 5 or 10 hidden mines. Each safe tile raises a fair multiplier. Cash out before you hit a mine. |
 | **Higher or Lower** | Call the next card. The live odds come from the cards still in the deck. One wrong call ends the run. |
-| **Pig** | Roll a die and bank your points before a 1 wipes the turn. First to 50 beats a computer that adapts when you are close to winning. |
+| **Sudoku** | Easy, medium or hard puzzles generated in your browser, each with exactly one solution. Notes, undo, hints, clash highlighting, a timer and best times. Leave mid-puzzle and it's still there when you come back. |
 | **Rock Paper Scissors** | First to three wins the match. Win streaks are tracked. |
 | **Number Guess** | Easy (1–20), Normal (1–100) or Hard (1–1000). A range bar shows what is still possible after each guess. |
 
@@ -22,12 +22,12 @@ Six quick browser games of luck and nerve: **Blackjack**, **Mines**, **Higher or
 | ![Blackjack](./docs/screenshots/blackjack.png) | ![Mines](./docs/screenshots/mines.png) |
 | **Higher or Lower** | **Rock Paper Scissors** |
 | ![Higher or Lower](./docs/screenshots/higher-or-lower.png) | ![Rock Paper Scissors](./docs/screenshots/rock-paper-scissors.png) |
-| **Pig** | **Number Guess** |
-| ![Pig](./docs/screenshots/pig.png) | ![Number Guess](./docs/screenshots/number-guess.png) |
+| **Sudoku** | **Number Guess** |
+| ![Sudoku](./docs/screenshots/sudoku.png) | ![Number Guess](./docs/screenshots/number-guess.png) |
 
 ## Features
 
-- **Keyboard play** in every game (keys are shown on the buttons), plus arrow keys to move around the Mines board
+- **Keyboard play** in every game (keys are shown on the buttons), plus arrow keys to move around the Mines and Sudoku boards
 - **Saved stats** per game in `localStorage`, shown on the home page tickets. Missing or broken storage never stops a game
 - **Sound effects** made with the Web Audio API, so there are no audio files to download. One toggle, remembered
 - **Accessible:** screen-reader announcements for every result, visible focus, reduced-motion support, and automated axe checks against WCAG 2.2 AA on every page
@@ -52,7 +52,7 @@ src/
 │   ├── blackjack/          # logic.ts, logic.test.ts, main.ts, style.css
 │   ├── mines/
 │   ├── higher-or-lower/
-│   ├── pig/
+│   ├── sudoku/
 │   ├── rock-paper-scissors/
 │   └── number-guess/
 ├── shared/                 # cards, randomness, storage, sound, page shell
@@ -67,6 +67,7 @@ Some of what the tests check:
 - Mines: the multiplier is fair (chance of surviving × payout = 1 at every step)
 - Number Guess: binary search always wins inside the try limit
 - Higher or Lower: the odds match a hand count of the deck
+- Sudoku: every generated puzzle has exactly one solution and the right number of clues
 - In the browser: a full match or hand of every game, accessibility, no sideways scrolling on phones, and no console errors
 
 ## Run it locally

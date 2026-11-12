@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sudoku | luckbox</title>
+    <meta name="description" content="The one game here where luck can&#x27;t help you. Fresh puzzles every time, each with exactly one solution.">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="https://playluckbox.vercel.app/sudoku/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="Sudoku | luckbox">
+    <meta property="og:description" content="The one game here where luck can&#x27;t help you. Fresh puzzles every time, each with exactly one solution.">
+    <meta property="og:url" content="https://playluckbox.vercel.app/sudoku/">
+    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/sudoku/main.ts"></script>
+  </head>
+  <body data-color="peach">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">Sudoku</h1>
+        <p class="game__lede">The one game here where luck can&#x27;t help you. Fresh puzzles every time, each with exactly one solution.</p>
+      </div>
+      <section class="table" aria-label="Sudoku table">
+        <div class="table__play" id="play">
+      <div class="sd-top">
+        <div>
+          <span class="field-label" id="level-label">Difficulty</span>
+          <div id="levels" class="segmented" role="group" aria-labelledby="level-label"></div>
+        </div>
+        <p class="sd-timer"><span class="visually-hidden">Time: </span><span id="timer">0:00</span></p>
+      </div>
+      <div class="sd-layout">
+        <div id="board" class="sd-board" role="grid" aria-label="Sudoku board, 9 by 9"></div>
+        <div class="sd-side">
+          <div id="pad" class="sd-pad" role="group" aria-label="Numbers"></div>
+          <div class="sd-tools">
+            <button id="notes" class="btn" type="button" aria-pressed="false">Notes <kbd>N</kbd></button>
+            <button id="erase" class="btn" type="button">Erase <kbd>⌫</kbd></button>
+            <button id="undo" class="btn" type="button">Undo <kbd>U</kbd></button>
+            <button id="hint" class="btn" type="button">Hint <kbd>H</kbd></button>
+          </div>
+        </div>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="controls">
+        <button id="again" class="btn btn--ink" type="button">New puzzle</button>
+      </div>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Fill the board so every row, column and 3 by 3 box has the numbers 1 to 9 once.</li>
+          <li>Pick a cell, then a number. Numbers that clash turn red, and the pad shows how many of each are left.</li>
+          <li>Turn on Notes to pencil in candidates. Placing a number clears it from the notes around it.</li>
+          <li>Hints fill in one cell. Best times only count puzzles solved without hints. Your puzzle is saved if you leave.</li>
+        </ul>
+        <p class="keys">Keyboard: arrow keys move, 1 to 9 place a number, Backspace erases, N toggles notes, U or Ctrl+Z undoes, H gives a hint.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/blackjack/" data-color="mint">Blackjack</a></li>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/rock-paper-scissors/" data-color="sky">Rock Paper Scissors</a></li>
+          <li><a href="/number-guess/" data-color="lilac">Number Guess</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
+</html>

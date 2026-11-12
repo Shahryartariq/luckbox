@@ -81,19 +81,72 @@ test("higher or lower: play a run until it ends", async ({ page }) => {
   await expect(page.locator("#higher")).toBeEnabled();
 });
 
-test("pig: roll, bank and let the computer play", async ({ page }) => {
+test("sudoku: place, note, undo and hint", async ({ page }) => {
   const errors = watchErrors(page);
-  await page.goto("/pig/");
-  await page.locator("#roll").click();
-  await expect(page.locator("#die .pip").first()).toBeVisible();
-  if (await page.locator("#bank").isEnabled()) {
-    await page.locator("#bank").click();
-  }
-  // The computer plays, then hands the turn back (or wins).
-  await expect(page.locator("#roll").or(page.locator("#again")).first()).toBeEnabled({ timeout: 30_000 });
-  const total = Number(await page.locator("#you-score").textContent()) + Number(await page.locator("#cpu-score").textContent());
-  expect(total).toBeGreaterThanOrEqual(0);
+  await page.goto("/sudoku/");
+  const cells = page.locator(".sd-cell");
+  await expect(cells).toHaveCount(81);
+  const given = await page.locator(".sd-cell.is-given").count();
+  expect(given).toBeGreaterThanOrEqual(38);
+
+  const selected = page.locator(".sd-cell.is-selected");
+  await expect(selected).not.toHaveClass(/is-given/);
+  await page.keyboard.press("5");
+  await expect(selected).toHaveText("5");
+  await page.keyboard.press("u");
+  await expect(selected).toHaveText("");
+
+  await page.locator("#notes").click();
+  await expect(page.locator("#notes")).toHaveAttribute("aria-pressed", "true");
+  await page.locator('.sd-key[data-n="2"]').click();
+  await page.locator('.sd-key[data-n="7"]').click();
+  await expect(selected.locator(".sd-notes")).toContainText("2");
+  await expect(selected.locator(".sd-notes")).toContainText("7");
+  await page.keyboard.press("n");
+
+  await page.keyboard.press("h");
+  await expect(page.locator("#status")).toContainText("Hint:");
+  await expect(page.locator(".sd-cell.is-selected")).not.toHaveText("");
+
+  // Progress survives a reload.
+  const filled = await cells.filter({ hasText: /^[1-9]$/ }).count();
+  await page.reload();
+  await expect(page.locator("#status")).toContainText("Welcome back");
+  await expect(cells.filter({ hasText: /^[1-9]$/ })).toHaveCount(filled);
   expect(errors).toEqual([]);
+});
+
+test("sudoku: solving the board wins and records a time", async ({ page }) => {
+  await page.goto("/sudoku/");
+  await expect(page.locator(".sd-cell")).toHaveCount(81);
+  const solution = await page.evaluate(() => JSON.parse(localStorage.getItem("luckbox:sudoku-game") ?? "{}").solution as number[]);
+  const puzzle = await page.evaluate(() => JSON.parse(localStorage.getItem("luckbox:sudoku-game") ?? "{}").puzzle as number[]);
+  for (let i = 0; i < 81; i++) {
+    if (puzzle[i]) continue;
+    await page.locator(".sd-cell").nth(i).click();
+    await page.keyboard.press(String(solution[i]));
+  }
+  await expect(page.locator("#status")).toHaveAttribute("data-tone", "win");
+  await expect(page.locator("#status")).toContainText("Solved in");
+  await expect(page.locator(".stat dd").first()).toHaveText("1");
+  await expect(page.locator(".sd-key").first()).toBeDisabled();
+});
+
+test("sudoku: clashing numbers are flagged", async ({ page }) => {
+  await page.goto("/sudoku/");
+  const puzzle = await page.evaluate(() => JSON.parse(localStorage.getItem("luckbox:sudoku-game") ?? "{}").puzzle as number[]);
+  // Find an empty cell and a given number in the same row, then place that number.
+  for (let i = 0; i < 81; i++) {
+    if (puzzle[i]) continue;
+    const row = Math.floor(i / 9);
+    const clash = puzzle.slice(row * 9, row * 9 + 9).find((v) => v > 0);
+    if (!clash) continue;
+    await page.locator(".sd-cell").nth(i).click();
+    await page.keyboard.press(String(clash));
+    await expect(page.locator(".sd-cell").nth(i)).toHaveClass(/is-conflict/);
+    await expect(page.locator("#status")).toHaveAttribute("data-tone", "lose");
+    break;
+  }
 });
 
 test("rock paper scissors: a match ends at three wins", async ({ page }) => {
