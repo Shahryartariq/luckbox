@@ -149,6 +149,64 @@ test("sudoku: clashing numbers are flagged", async ({ page }) => {
   }
 });
 
+test("2048: keys slide tiles, score adds up, progress is saved", async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto("/2048/");
+  const tiles = page.locator(".g2-tile");
+  await expect(tiles).toHaveCount(2);
+  const order = ["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"];
+  for (let i = 0; i < 40; i++) await page.keyboard.press(order[i % 4]!);
+  // Each tile on the board is a power of two, and the total equals spawned 2s and 4s.
+  const values = (await page.locator(".g2-tile").allTextContents()).map(Number);
+  expect(values.every((v) => v >= 2 && (v & (v - 1)) === 0)).toBe(true);
+  const score = Number(await page.locator("#score").textContent());
+  expect(score).toBeGreaterThan(0);
+  await expect(page.locator("#board-text")).toContainText("Row 1:");
+
+  await page.reload();
+  await expect(page.locator("#status")).toContainText("Welcome back");
+  await expect(page.locator("#score")).toHaveText(String(score));
+  await expect(page.locator(".g2-tile")).toHaveCount(values.length);
+  expect(errors).toEqual([]);
+});
+
+test("2048: the on-screen arrows and a swipe both move tiles", async ({ page }) => {
+  await page.goto("/2048/");
+  const before = await page.locator("#board-text").textContent();
+  for (const dir of ["left", "up", "right", "down"]) {
+    await page.locator(`[data-dir="${dir}"]`).click();
+    if ((await page.locator("#board-text").textContent()) !== before) break;
+  }
+  expect(await page.locator("#board-text").textContent()).not.toBe(before);
+
+  const box = (await page.locator("#board").boundingBox())!;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  let moved = false;
+  for (const [dx, dy] of [[-120, 0], [0, -120], [120, 0], [0, 120]] as const) {
+    const prev = await page.locator("#board-text").textContent();
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + dx, cy + dy, { steps: 5 });
+    await page.mouse.up();
+    if ((await page.locator("#board-text").textContent()) !== prev) {
+      moved = true;
+      break;
+    }
+  }
+  expect(moved).toBe(true);
+});
+
+test("2048: new game asks twice once you have a score", async ({ page }) => {
+  await page.goto("/2048/");
+  for (const k of ["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"]) await page.keyboard.press(k);
+  await page.keyboard.press("n");
+  await expect(page.locator("#new-game-label")).toHaveText("Press again to restart");
+  await page.keyboard.press("n");
+  await expect(page.locator("#score")).toHaveText("0");
+  await expect(page.locator(".g2-tile")).toHaveCount(2);
+});
+
 test("rock paper scissors: a match ends at three wins", async ({ page }) => {
   await page.goto("/rock-paper-scissors/");
   for (let i = 0; i < 40 && (await page.locator("#again").isHidden()); i++) {

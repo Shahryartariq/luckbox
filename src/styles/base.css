@@ -16,6 +16,7 @@
   --sky: #9ccbff;
   --lilac: #cdbbff;
   --peach: #ffbe8a;
+  --lime: #c6ef6b;
 
   --win: #0a7a4b;
   --lose: #c81e35;
@@ -40,6 +41,7 @@ body[data-color="mint"] { --accent: var(--mint); }
 body[data-color="sky"] { --accent: var(--sky); }
 body[data-color="lilac"] { --accent: var(--lilac); }
 body[data-color="peach"] { --accent: var(--peach); }
+body[data-color="lime"] { --accent: var(--lime); }
 
 *,
 *::before,
@@ -601,6 +603,7 @@ button {
 .more a[data-color="sky"] { --chip: var(--sky); }
 .more a[data-color="lilac"] { --chip: var(--lilac); }
 .more a[data-color="peach"] { --chip: var(--peach); }
+.more a[data-color="lime"] { --chip: var(--lime); }
 
 .site-footer {
   max-width: 72rem;
