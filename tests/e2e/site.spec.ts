@@ -6,7 +6,7 @@ test("home page lists every game", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/luckbox/);
   const links = page.locator(".ticket__link");
-  await expect(links).toHaveCount(6);
+  await expect(links).toHaveCount(7);
   for (const path of GAME_PATHS) await expect(page.locator(`.ticket__link[href="${path}"]`)).toBeVisible();
   await expectNoSideScroll(page);
   await expectAccessible(page);

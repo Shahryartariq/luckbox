@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2048 | luckbox</title>
+    <meta name="description" content="Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="https://playluckbox.vercel.app/2048/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="2048 | luckbox">
+    <meta property="og:description" content="Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.">
+    <meta property="og:url" content="https://playluckbox.vercel.app/2048/">
+    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/2048/main.ts"></script>
+  </head>
+  <body data-color="lime">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">2048</h1>
+        <p class="game__lede">Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.</p>
+      </div>
+      <section class="table" aria-label="2048 table">
+        <div class="table__play" id="play">
+      <div class="g2-top">
+        <div class="g2-scores">
+          <p class="g2-score"><span class="g2-score__label">Score</span><span id="score" class="g2-score__value">0</span></p>
+          <p class="g2-score"><span class="g2-score__label">Best</span><span id="best-score" class="g2-score__value">0</span></p>
+        </div>
+        <button id="new-game" class="btn btn--ink" type="button"><span id="new-game-label">New game</span> <kbd>N</kbd></button>
+      </div>
+      <div class="g2-play">
+        <div id="board" class="g2-board" role="group" aria-label="2048 board" aria-describedby="board-text" tabindex="-1">
+          <div class="g2-grid" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div id="tiles" class="g2-tiles"></div>
+          <div id="overlay" class="g2-overlay" hidden>
+            <p id="overlay-text"></p>
+            <div class="controls">
+              <button id="keep-going" class="btn btn--primary" type="button">Keep going</button>
+              <button id="try-again" class="btn btn--ink" type="button">Try again</button>
+            </div>
+          </div>
+        </div>
+        <div class="g2-pad" role="group" aria-label="Slide tiles">
+          <button class="btn" type="button" data-dir="up" aria-label="Slide up">↑</button>
+          <button class="btn" type="button" data-dir="left" aria-label="Slide left">←</button>
+          <button class="btn" type="button" data-dir="down" aria-label="Slide down">↓</button>
+          <button class="btn" type="button" data-dir="right" aria-label="Slide right">→</button>
+        </div>
+      </div>
+      <p id="board-text" class="visually-hidden"></p>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Slide all the tiles up, down, left or right. Two tiles with the same number merge into one.</li>
+          <li>After every move a new 2 or 4 appears in a random empty cell.</li>
+          <li>Reach the 2048 tile to win, then keep going for a bigger score if you like.</li>
+          <li>The game ends when the board is full and no tiles can merge. Your game is saved if you leave.</li>
+        </ul>
+        <p class="keys">Keyboard: arrow keys or W A S D to slide, N for a new game. On a phone, swipe on the board.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/blackjack/" data-color="mint">Blackjack</a></li>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/sudoku/" data-color="peach">Sudoku</a></li>
+          <li><a href="/rock-paper-scissors/" data-color="sky">Rock Paper Scissors</a></li>
+          <li><a href="/number-guess/" data-color="lilac">Number Guess</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
+</html>

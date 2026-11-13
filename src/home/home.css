@@ -43,6 +43,7 @@
 .ticket[data-color="sky"] { --t: var(--sky); }
 .ticket[data-color="lilac"] { --t: var(--lilac); }
 .ticket[data-color="peach"] { --t: var(--peach); }
+.ticket[data-color="lime"] { --t: var(--lime); }
 
 .ticket:nth-child(2n) { --tilt: 0.8deg; }
 .ticket:nth-child(3n) { --tilt: -0.5deg; }

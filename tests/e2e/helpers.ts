@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { type Page, expect } from "@playwright/test";
 
-export const GAME_PATHS = ["/blackjack/", "/mines/", "/higher-or-lower/", "/sudoku/", "/rock-paper-scissors/", "/number-guess/"];
+export const GAME_PATHS = ["/blackjack/", "/mines/", "/higher-or-lower/", "/sudoku/", "/2048/", "/rock-paper-scissors/", "/number-guess/"];
 
 /** Fails the test on any uncaught error or console error. */
 export function watchErrors(page: Page): string[] {

@@ -5,7 +5,7 @@ export interface GameInfo {
   /** One sentence for the home page ticket. */
   blurb: string;
   /** Ticket colour token from tokens.css. */
-  color: "sun" | "pink" | "mint" | "sky" | "lilac" | "peach";
+  color: "sun" | "pink" | "mint" | "sky" | "lilac" | "peach" | "lime";
   /** Short label for the controls, e.g. "R, P, S". */
   keys: string;
 }
@@ -38,6 +38,13 @@ export const GAMES: readonly GameInfo[] = [
     blurb: "The one game here where luck can't help you. Fresh puzzles every time, each with exactly one solution.",
     color: "peach",
     keys: "Arrows move, 1 to 9 place, N notes",
+  },
+  {
+    slug: "2048",
+    name: "2048",
+    blurb: "Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.",
+    color: "lime",
+    keys: "Arrows or WASD to slide, N new game",
   },
   {
     slug: "rock-paper-scissors",

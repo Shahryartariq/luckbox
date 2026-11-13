@@ -29,6 +29,10 @@ const lines: Record<string, () => string | null> = {
     const secs = Number(best[1]);
     return `${s.solved} solved, best ${best[0]} ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
   },
+  "2048": () => {
+    const s = load("2048", { bestScore: 0, bestTile: 0 });
+    return s.bestScore === 0 ? null : `Best ${s.bestScore}, biggest tile ${s.bestTile}`;
+  },
   "rock-paper-scissors": () => {
     const s = load("rock-paper-scissors", { matchesWon: 0, matchesLost: 0 });
     return s.matchesWon + s.matchesLost === 0 ? null : `${s.matchesWon} of ${s.matchesWon + s.matchesLost} matches won`;
