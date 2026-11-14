@@ -1,8 +1,8 @@
 {
   "name": "luckbox",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
-  "description": "Six browser games of luck: Rock Paper Scissors, Blackjack, Number Guess, Higher or Lower, Pig and Mines.",
+  "description": "Seven browser games, from pure luck to pure logic: Blackjack, Mines, Higher or Lower, Sudoku, 2048, Rock Paper Scissors and Number Guess.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -17,7 +17,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "serve": "node scripts/serve.mjs",
+    "lighthouse": "lhci autorun"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
@@ -26,14 +28,12 @@
     "@types/node": "^22.20.5",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
-    "jsdom": "^31.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"
   },
-  "dependencies": {
-    "@fontsource/atkinson-hyperlegible-next": "^5.3.0",
-    "@fontsource/bungee": "^5.3.0"
+  "overrides": {
+    "minimatch": "^11.0.8"
   }
 }
