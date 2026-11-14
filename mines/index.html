@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mines | luckbox</title>
+    <title>Play Mines free in your browser | luckbox</title>
     <meta name="description" content="Flip tiles on a 5 by 5 grid. Every safe tile raises your multiplier. Cash out before you hit a mine.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/mines/">
+    <link rel="canonical" href="%VITE_SITE_URL%/mines/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="Mines | luckbox">
+    <meta property="og:title" content="Play Mines free in your browser | luckbox">
     <meta property="og:description" content="Flip tiles on a 5 by 5 grid. Every safe tile raises your multiplier. Cash out before you hit a mine.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/mines/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:url" content="%VITE_SITE_URL%/mines/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/mines.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Mines in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/mines/main.ts"></script>
   </head>
@@ -34,7 +38,7 @@
       <div class="mines-top">
         <div>
           <span class="field-label" id="mines-label">Mines</span>
-          <div id="mine-options" class="segmented" role="group" aria-labelledby="mines-label"></div>
+          <div id="mine-options" class="segmented" role="group" aria-labelledby="mines-label"><button type="button" aria-label="3 mines" aria-pressed="true">3</button><button type="button" aria-label="5 mines" aria-pressed="false">5</button><button type="button" aria-label="10 mines" aria-pressed="false">10</button></div>
         </div>
         <div class="mines-meter" aria-live="polite">
           <span class="mines-meter__now" id="multiplier">1.00×</span>
@@ -44,14 +48,14 @@
       <div id="grid" class="mines-grid" role="grid" aria-label="Mines board, 5 by 5"></div>
       <p id="status" class="status" role="status" aria-live="polite"></p>
       <div class="controls">
-        <button id="cash-out" class="btn btn--primary" type="button" disabled>Cash out <kbd>C</kbd></button>
+        <button id="cash-out" class="btn btn--primary" type="button" disabled><span id="cash-out-label">Cash out</span> <kbd>C</kbd></button>
         <button id="new-round" class="btn" type="button">New round <kbd>N</kbd></button>
         <button id="refill" class="btn btn--ink" type="button" hidden>Refill to 100 points</button>
       </div>
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Points</dt><dd>100</dd></div><div class="stat"><dt>Most points</dt><dd>100</dd></div><div class="stat"><dt>Best cash-out</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Rounds</dt><dd>0</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>

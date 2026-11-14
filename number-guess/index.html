@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Number Guess | luckbox</title>
+    <title>Play Number Guess free in your browser | luckbox</title>
     <meta name="description" content="Find the secret number with as few guesses as you can. Each miss narrows the range.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/number-guess/">
+    <link rel="canonical" href="%VITE_SITE_URL%/number-guess/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="Number Guess | luckbox">
+    <meta property="og:title" content="Play Number Guess free in your browser | luckbox">
     <meta property="og:description" content="Find the secret number with as few guesses as you can. Each miss narrows the range.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/number-guess/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:url" content="%VITE_SITE_URL%/number-guess/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/number-guess.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Number Guess in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/number-guess/main.ts"></script>
   </head>
@@ -33,7 +37,7 @@
         <div class="table__play" id="play">
       <div>
         <span class="field-label" id="level-label">Difficulty</span>
-        <div id="levels" class="segmented" role="group" aria-labelledby="level-label"></div>
+        <div id="levels" class="segmented" role="group" aria-labelledby="level-label"><button type="button" aria-pressed="false">Easy: 1 to 20</button><button type="button" aria-pressed="true">Normal: 1 to 100</button><button type="button" aria-pressed="false">Hard: 1 to 1000</button></div>
       </div>
       <form id="guess-form" class="ng-form" novalidate>
         <label class="field-label" for="guess-input">Your guess (<span id="range-text">1 to 100</span>)</label>
@@ -56,7 +60,7 @@
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Wins</dt><dd>0</dd></div><div class="stat"><dt>Losses</dt><dd>0</dd></div><div class="stat"><dt>Best on easy</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Best on normal</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Best on hard</dt><dd class="stat__text">None yet</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>

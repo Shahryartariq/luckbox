@@ -96,3 +96,9 @@
     width: 100%;
   }
 }
+
+/* Hold the card's space before the first card is dealt. */
+#current-card {
+  width: clamp(96px, 26vw, 132px);
+  aspect-ratio: 5 / 7;
+}

@@ -1,0 +1,59 @@
+/* Self-hosted Latin subsets only (about 39 KB in all), preloaded by the build.
+   The "Fallback" faces are local Arial resized to match each web font, so text
+   takes the same space before and after the web fonts arrive (no layout shift). */
+
+@font-face {
+  font-family: "Bungee";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/bungee-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/atkinson-hyperlegible-next-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/atkinson-hyperlegible-next-latin-700-normal.woff2") format("woff2");
+}
+
+/* Measured against Arial: Bungee capitals are 3.5% wider than bold Arial capitals,
+   Atkinson is 1% narrower than Arial. Ascent and descent match the web fonts. */
+@font-face {
+  font-family: "Bungee Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Arial"), local("Liberation Sans Bold");
+  font-weight: 400;
+  size-adjust: 103.5%;
+  ascent-override: 98.5%;
+  descent-override: 29%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Atkinson Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  font-weight: 400;
+  size-adjust: 99%;
+  ascent-override: 99%;
+  descent-override: 32.3%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Atkinson Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold");
+  font-weight: 700;
+  size-adjust: 99.2%;
+  ascent-override: 98.8%;
+  descent-override: 32.3%;
+  line-gap-override: 0%;
+}

@@ -7,6 +7,7 @@
 /* The wordmark is the page's one loud element: signage type with a hard ink shadow. */
 .hero__title {
   font-family: var(--font-display);
+  text-transform: uppercase;
   font-weight: 400;
   font-size: clamp(4.25rem, 17vw, 11rem);
   line-height: 0.9;
@@ -86,6 +87,7 @@
 
 .ticket__name {
   font-family: var(--font-display);
+  text-transform: uppercase;
   font-size: clamp(1.6rem, 3.6vw, 2.1rem);
   line-height: 1;
 }
