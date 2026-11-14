@@ -47,9 +47,9 @@ test("every page has a canonical URL, social image and structured data", async (
     await page.goto(path);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `${SITE}${path}`);
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", `${SITE}${path}`);
-    const image = (await page.locator('meta[property="og:image"]').getAttribute("content")) ?? "";
-    expect(image.startsWith(SITE)).toBe(true);
-    expect((await request.get(image.replace(SITE, ""))).status()).toBe(200);
+    const image = new URL((await page.locator('meta[property="og:image"]').getAttribute("content")) ?? "");
+    expect(image.origin).toBe(new URL(SITE).origin);
+    expect((await request.get(image.pathname)).status()).toBe(200);
     const types = await page.locator('script[type="application/ld+json"]').evaluateAll((els) =>
       els.map((e) => (JSON.parse(e.textContent ?? "{}") as { "@type": string })["@type"]),
     );

@@ -17,8 +17,8 @@ export interface GuessEntry {
 export class NumberGuess {
   readonly max: number;
   readonly tries: number;
-  readonly secret: number;
-  /** Smallest and largest numbers the secret can still be. */
+  readonly answer: number;
+  /** Smallest and largest numbers the answer can still be. */
   low = 1;
   high: number;
   guesses: GuessEntry[] = [];
@@ -31,7 +31,7 @@ export class NumberGuess {
     this.max = LEVELS[level].max;
     this.tries = LEVELS[level].tries;
     this.high = this.max;
-    this.secret = randomInt(1, this.max, rng);
+    this.answer = randomInt(1, this.max, rng);
   }
 
   get triesLeft(): number {
@@ -50,7 +50,7 @@ export class NumberGuess {
   guess(value: number): GuessResult {
     const error = this.validate(value);
     if (error) throw new Error(error);
-    const result: GuessResult = value === this.secret ? "correct" : value < this.secret ? "higher" : "lower";
+    const result: GuessResult = value === this.answer ? "correct" : value < this.answer ? "higher" : "lower";
     this.guesses.push({ value, result });
     if (result === "higher") this.low = Math.max(this.low, value + 1);
     if (result === "lower") this.high = Math.min(this.high, value - 1);
@@ -66,7 +66,7 @@ export class NumberGuess {
 
 export interface SavedGuessGame {
   level: string;
-  secret: number;
+  answer: number;
   guesses: number[];
 }
 
@@ -76,10 +76,10 @@ export function restoreGame(data: unknown): NumberGuess | null {
   if (!d || typeof d.level !== "string" || !(d.level in LEVELS) || !Array.isArray(d.guesses)) return null;
   const level = d.level as Level;
   const max = LEVELS[level].max;
-  if (!Number.isInteger(d.secret) || (d.secret as number) < 1 || (d.secret as number) > max) return null;
-  const secret = d.secret as number;
-  // An rng that makes randomInt(1, max) return exactly `secret`.
-  const game = new NumberGuess(level, () => (secret - 1 + 0.5) / max);
+  if (!Number.isInteger(d.answer) || (d.answer as number) < 1 || (d.answer as number) > max) return null;
+  const answer = d.answer as number;
+  // An rng that makes randomInt(1, max) return exactly `answer`.
+  const game = new NumberGuess(level, () => (answer - 1 + 0.5) / max);
   for (const g of d.guesses) {
     if (typeof g !== "number" || game.validate(g)) return null;
     game.guess(g);
@@ -88,7 +88,7 @@ export function restoreGame(data: unknown): NumberGuess | null {
 }
 
 export function saveGame(game: NumberGuess): SavedGuessGame {
-  return { level: game.level, secret: game.secret, guesses: game.guesses.map((g) => g.value) };
+  return { level: game.level, answer: game.answer, guesses: game.guesses.map((g) => g.value) };
 }
 
 /** Parses what the player typed: digits only, so "1e1" or "10.0" are rejected rather than read as 10. */

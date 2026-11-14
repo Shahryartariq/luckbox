@@ -123,7 +123,7 @@ form.addEventListener("submit", (event) => {
     play("win");
   } else if (game.status === "lost") {
     stats.losses++;
-    announce(`Out of tries. The number was ${game.secret}.`, "lose");
+    announce(`Out of tries. The number was ${game.answer}.`, "lose");
     play("lose");
   } else {
     announce(`${value} is too ${result === "higher" ? "low. Go higher" : "high. Go lower"}.`, "info");
