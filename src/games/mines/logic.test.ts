@@ -48,6 +48,20 @@ describe("MinesRound", () => {
     expect(r.cleared).toBe(true);
   });
 
+  it("saves and restores a round in progress", () => {
+    const r = new MinesRound(5, 10, seededRng(6));
+    const safe = [...Array(SIZE).keys()].filter((i) => !r.mineAt.has(i));
+    r.reveal(safe[0]!);
+    r.reveal(safe[1]!);
+    const back = MinesRound.restore(JSON.parse(JSON.stringify(r.save())))!;
+    expect(back.safeCount).toBe(2);
+    expect([...back.mineAt].sort()).toEqual([...r.mineAt].sort());
+    expect(back.payout).toBe(r.payout);
+    expect(MinesRound.restore({ ...r.save(), mineAt: [1, 1, 2, 3, 4] })).toBeNull();
+    expect(MinesRound.restore({ ...r.save(), revealed: [...r.mineAt].slice(0, 1) })).toBeNull();
+    expect(MinesRound.restore(null)).toBeNull();
+  });
+
   it("rejects repeat picks", () => {
     const r = new MinesRound(3, 10, seededRng(4));
     const safe = [...Array(SIZE).keys()].find((i) => !r.mineAt.has(i))!;

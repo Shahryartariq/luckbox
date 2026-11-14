@@ -57,9 +57,17 @@ export function renderCard(card: Card | null, options: { hidden?: boolean; deal?
   el.setAttribute("role", "img");
   el.setAttribute("aria-label", cardLabel(card));
   const symbol = SUIT_SYMBOL[card.suit];
-  el.innerHTML = `
-    <span class="card__corner" aria-hidden="true">${card.rank}<br>${symbol}</span>
-    <span class="card__pip" aria-hidden="true">${symbol}</span>
-    <span class="card__corner card__corner--flip" aria-hidden="true">${card.rank}<br>${symbol}</span>`;
+  const corner = (flip: boolean): HTMLElement => {
+    const c = document.createElement("span");
+    c.className = flip ? "card__corner card__corner--flip" : "card__corner";
+    c.setAttribute("aria-hidden", "true");
+    c.append(card.rank, document.createElement("br"), symbol);
+    return c;
+  };
+  const pip = document.createElement("span");
+  pip.className = "card__pip";
+  pip.setAttribute("aria-hidden", "true");
+  pip.textContent = symbol;
+  el.append(corner(false), pip, corner(true));
   return el;
 }

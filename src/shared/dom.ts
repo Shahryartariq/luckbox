@@ -42,3 +42,50 @@ export function pulse(el: HTMLElement, className: string): void {
   void el.offsetWidth;
   el.classList.add(className);
 }
+
+/**
+ * Two-step confirm without a browser dialog: the first call arms the button and
+ * changes its label, a second call within 3 seconds runs the action.
+ * Returns a function to call on each click.
+ */
+export function confirmTwice(label: HTMLElement, armedText: string, action: () => void): () => void {
+  let armed = false;
+  let timer: number | undefined;
+  const original = label.textContent ?? "";
+  return () => {
+    if (!armed) {
+      armed = true;
+      label.textContent = armedText;
+      timer = window.setTimeout(() => {
+        armed = false;
+        label.textContent = original;
+      }, 3000);
+      return;
+    }
+    window.clearTimeout(timer);
+    armed = false;
+    label.textContent = original;
+    action();
+  };
+}
+
+/**
+ * Guards actions that would throw away a game in progress. The first call explains
+ * what will happen via `warn`; the same action again within 3 seconds goes ahead.
+ */
+export function makeAbandonGuard(inProgress: () => boolean, warn: (message: string) => void) {
+  let armedKey: string | null = null;
+  let timer: number | undefined;
+  return (key: string, message: string, action: () => void): void => {
+    if (!inProgress() || armedKey === key) {
+      window.clearTimeout(timer);
+      armedKey = null;
+      action();
+      return;
+    }
+    armedKey = key;
+    warn(message);
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => (armedKey = null), 3000);
+  };
+}

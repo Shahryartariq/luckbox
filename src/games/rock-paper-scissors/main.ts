@@ -39,6 +39,7 @@ function setMovesEnabled(on: boolean): void {
 
 function reset(): void {
   match = newMatch();
+  remove("rock-paper-scissors-match");
   youScore.textContent = "0";
   cpuScore.textContent = "0";
   youHand.textContent = cpuHand.textContent = "✊";
@@ -109,6 +110,8 @@ async function choose(move: Move): Promise<void> {
   }
 
   save("rock-paper-scissors", stats);
+  if (winner) remove("rock-paper-scissors-match");
+  else save("rock-paper-scissors-match", match);
   showStats();
   if (winner) {
     again.hidden = false;
@@ -135,5 +138,14 @@ initReset(() => {
   showStats();
 });
 
+// A match left half-played picks up where it was, so a reload can't wipe a losing score.
+const savedMatch = load("rock-paper-scissors-match", { you: 0, cpu: 0, target: 3, rounds: 0 });
 showStats();
 reset();
+if (savedMatch.rounds > 0 && Number.isInteger(savedMatch.you) && Number.isInteger(savedMatch.cpu) && savedMatch.you >= 0 && savedMatch.cpu >= 0 && savedMatch.target === 3 && !matchWinner(savedMatch)) {
+  match = savedMatch;
+  youScore.textContent = String(match.you);
+  cpuScore.textContent = String(match.cpu);
+  save("rock-paper-scissors-match", match);
+  announce(`Welcome back. It's ${match.you} to ${match.cpu}. Make your move.`);
+}

@@ -1,10 +1,10 @@
 import "./style.css";
 import { renderCard } from "../../shared/cards";
 import { $, shortcuts, wait } from "../../shared/dom";
-import { load, remove, save } from "../../shared/storage";
+import { load, loadRaw, remove, save } from "../../shared/storage";
 import { announce, initGamePage, initReset, renderStats } from "../../shared/shell";
 import { play } from "../../shared/sound";
-import { BETS, Blackjack, type Phase, STARTING_CHIPS, handValue, payout } from "./logic";
+import { BETS, Blackjack, type Hand, type Phase, STARTING_CHIPS, handValue, isBlackjack, payout } from "./logic";
 
 initGamePage("blackjack");
 
@@ -26,6 +26,7 @@ const btn = {
   hit: $<HTMLButtonElement>("hit"),
   stand: $<HTMLButtonElement>("stand"),
   double: $<HTMLButtonElement>("double"),
+  split: $<HTMLButtonElement>("split"),
   refill: $<HTMLButtonElement>("refill"),
 };
 const betBox = $("bets");
@@ -41,33 +42,62 @@ function showStats(): void {
   ]);
 }
 
+/** Saves stats and the round in progress, so a reload can't skip a losing hand. */
 function persist(): void {
   stats.chips = game.chips;
   stats.bet = bet;
   stats.mostChips = Math.max(stats.mostChips, game.chips);
   save("blackjack", stats);
+  save("blackjack-table", game.save());
   showStats();
 }
 
-function totalText(cards: typeof game.player): string {
+function totalText(cards: readonly Hand["cards"][number][]): string {
   if (cards.length === 0) return "";
   const { total, soft } = handValue(cards);
   if (total > 21) return `${total}, bust`;
   return soft && total < 21 ? `${total - 10} or ${total}` : String(total);
 }
 
-/** Draws both hands. The dealer's second card stays face down during your turn. */
+const OUTCOME_TEXT = { blackjack: "Blackjack", win: "Won", lose: "Lost", push: "Push" } as const;
+
+/** Draws both sides. The dealer's second card stays face down during your turn. */
 function renderHands(newCards: { player?: number; dealer?: number } = {}): void {
   const hideHole = game.phase === "player";
-  playerHand.replaceChildren(
-    ...game.player.map((c, i) => renderCard(c, { deal: i >= game.player.length - (newCards.player ?? 0) })),
-  );
+  const split = game.hands.length > 1;
+  if (!split) {
+    const cards = game.hands[0]?.cards ?? [];
+    playerHand.className = "hand";
+    playerHand.replaceChildren(...cards.map((c, i) => renderCard(c, { deal: i >= cards.length - (newCards.player ?? 0) })));
+    playerTotal.textContent = totalText(cards);
+  } else {
+    playerHand.className = "bj-split";
+    playerTotal.textContent = "";
+    playerHand.replaceChildren(
+      ...game.hands.map((h, n) => {
+        const box = document.createElement("div");
+        box.className = "bj-hand";
+        const isActive = game.phase === "player" && n === game.active;
+        box.dataset.active = String(isActive);
+        if (isActive) box.setAttribute("aria-current", "true");
+        const label = document.createElement("p");
+        label.className = "bj-hand__label";
+        const extra = h.outcome ? `, ${OUTCOME_TEXT[h.outcome]}` : h.doubled ? ", doubled" : "";
+        label.textContent = `Hand ${n + 1}: ${totalText(h.cards)}${extra}`;
+        const cards = document.createElement("div");
+        cards.className = "hand";
+        const fresh = n === game.active ? (newCards.player ?? 0) : 0;
+        cards.append(...h.cards.map((c, i) => renderCard(c, { deal: i >= h.cards.length - fresh })));
+        box.append(label, cards);
+        return box;
+      }),
+    );
+  }
   dealerHand.replaceChildren(
     ...game.dealer.map((c, i) =>
       renderCard(c, { hidden: hideHole && i === 1, deal: i >= game.dealer.length - (newCards.dealer ?? 0) }),
     ),
   );
-  playerTotal.textContent = totalText(game.player);
   dealerTotal.textContent = hideHole ? totalText(game.dealer.slice(0, 1)) : totalText(game.dealer);
 }
 
@@ -93,51 +123,54 @@ function renderBets(): void {
 
 function renderControls(): void {
   const playing = game.phase === "player" && !busy;
+  const inRound = game.phase === "player" || game.phase === "dealer";
   const broke = game.chips < Math.min(...BETS);
   // Fall back to the largest bet you can afford.
   if (!broke && bet > game.chips) bet = [...BETS].reverse().find((b) => b <= game.chips) ?? BETS[0];
-  btn.deal.disabled = busy || playing || broke || !game.canDeal(bet);
-  btn.deal.hidden = broke;
-  btn.refill.hidden = !broke || game.phase === "player" || game.phase === "dealer";
+  btn.deal.disabled = busy || inRound || broke || !game.canDeal(bet);
+  btn.deal.hidden = broke && !inRound;
+  btn.refill.hidden = !broke || inRound;
   btn.hit.disabled = !playing;
   btn.stand.disabled = !playing;
   btn.double.disabled = !playing || !game.canDouble();
+  btn.split.disabled = !playing || !game.canSplit();
   chipsEl.textContent = String(game.chips);
   renderBets();
 }
 
-function report(): void {
-  const outcome = game.outcome;
-  if (!outcome) return;
-  const net = payout(outcome, game.bet);
-  const you = handValue(game.player).total;
+function handSummary(h: Hand, n: number, many: boolean): string {
+  const net = payout(h.outcome ?? "push", h.bet);
+  const name = many ? `Hand ${n + 1}` : "You";
+  const you = handValue(h.cards).total;
   const dealer = handValue(game.dealer).total;
-  switch (outcome) {
+  switch (h.outcome) {
     case "blackjack":
-      stats.blackjacks++;
-      stats.won++;
-      announce(`Blackjack! You win ${net} chips.`, "win");
-      play("win");
-      break;
+      return `Blackjack! ${name} win${many ? "s" : ""} ${net} chips.`;
     case "win":
-      stats.won++;
-      announce(dealer > 21 ? `Dealer busts. You win ${net} chips.` : `${you} beats ${dealer}. You win ${net} chips.`, "win");
-      play("win");
-      break;
+      return dealer > 21 ? `Dealer busts. ${name} win${many ? "s" : ""} ${net}.` : `${you} beats ${dealer}. ${name} win${many ? "s" : ""} ${net}.`;
     case "lose":
-      stats.lost++;
-      announce(
-        you > 21 ? `Bust with ${you}. You lose ${-net} chips.` : dealer === 21 && game.dealer.length === 2 ? `Dealer has blackjack. You lose ${-net} chips.` : `Dealer's ${dealer} beats ${you}. You lose ${-net} chips.`,
-        "lose",
-      );
-      play("lose");
-      break;
-    case "push":
-      stats.pushes++;
-      announce(`Push at ${you}. Your bet comes back.`, "push");
-      play("push");
-      break;
+      if (you > 21) return `${name} bust${many ? "s" : ""} with ${you}, losing ${-net}.`;
+      if (isBlackjack(game.dealer)) return `Dealer has blackjack. ${name} lose${many ? "s" : ""} ${-net}.`;
+      return `Dealer's ${dealer} beats ${you}. ${name} lose${many ? "s" : ""} ${-net}.`;
+    default:
+      return `Push at ${you}. ${many ? "That bet" : "Your bet"} comes back.`;
   }
+}
+
+function report(): void {
+  if (game.phase !== "done") return;
+  const many = game.hands.length > 1;
+  for (const h of game.hands) {
+    if (h.outcome === "blackjack") stats.blackjacks++;
+    if (h.outcome === "blackjack" || h.outcome === "win") stats.won++;
+    else if (h.outcome === "lose") stats.lost++;
+    else stats.pushes++;
+  }
+  const lines = game.hands.map((h, n) => handSummary(h, n, many));
+  const net = game.net;
+  if (many) lines.push(net > 0 ? `Net +${net}.` : net < 0 ? `Net ${net}.` : "You break even.");
+  announce(lines.join(" "), net > 0 ? "win" : net < 0 ? "lose" : "push");
+  play(net > 0 ? "win" : net < 0 ? "lose" : "push");
   if (game.chips < Math.min(...BETS)) announce("You're out of chips. Refill to keep playing.", "lose");
   persist();
 }
@@ -150,6 +183,7 @@ async function dealerTurn(): Promise<void> {
   await wait(550);
   for (;;) {
     const card = game.dealerStep();
+    persist();
     if (!card) break;
     renderHands({ dealer: 1 });
     play("flip");
@@ -162,7 +196,19 @@ async function dealerTurn(): Promise<void> {
   btn.deal.focus();
 }
 
+function prompt(prefix = ""): void {
+  const many = game.hands.length > 1;
+  const total = handValue(game.player).total;
+  const options = ["hit", "stand"];
+  if (game.canDouble()) options.push("double");
+  if (game.canSplit()) options.push("split");
+  const last = options.pop();
+  const list = `${options.join(", ")} or ${last}`;
+  announce(`${prefix}${many ? `Hand ${game.active + 1}: ` : ""}${total}. ${list.charAt(0).toUpperCase()}${list.slice(1)}?`);
+}
+
 async function afterPlayerAction(): Promise<void> {
+  persist();
   if (game.phase === "dealer") await dealerTurn();
   else if (game.phase === "done") {
     renderHands();
@@ -171,6 +217,7 @@ async function afterPlayerAction(): Promise<void> {
     btn.deal.focus();
   } else {
     renderControls();
+    prompt();
   }
 }
 
@@ -179,11 +226,11 @@ async function deal(): Promise<void> {
   game.deal(bet);
   play("flip");
   renderHands({ player: 2, dealer: 2 });
-  // Read the phase again: deal() may have ended the hand on a natural blackjack.
-  const phase = game.phase as Phase;
-  if (phase === "player") {
-    announce(`Your bet is ${bet}. Hit or stand?`);
+  // deal() may end the round at once on a natural, so read the phase again.
+  if ((game.phase as Phase) === "player") {
     renderControls();
+    persist();
+    prompt();
     btn.hit.focus();
   } else {
     await afterPlayerAction();
@@ -201,15 +248,25 @@ function hit(): void {
 function stand(): void {
   if (busy || game.phase !== "player") return;
   game.stand();
+  renderHands();
   void afterPlayerAction();
 }
 
 function double(): void {
   if (busy || !game.canDouble()) return;
+  const n = game.active;
   game.double();
   play("flip");
   renderHands({ player: 1 });
-  announce(`Doubled to ${game.bet}. One card only.`);
+  announce(`${game.hands.length > 1 ? `Hand ${n + 1} doubled` : "Doubled"} to ${game.hands[n]?.bet ?? 0}. One card only.`);
+  void afterPlayerAction();
+}
+
+function split(): void {
+  if (busy || !game.canSplit()) return;
+  game.split();
+  play("flip");
+  renderHands({ player: 1 });
   void afterPlayerAction();
 }
 
@@ -217,6 +274,7 @@ btn.deal.addEventListener("click", () => void deal());
 btn.hit.addEventListener("click", hit);
 btn.stand.addEventListener("click", stand);
 btn.double.addEventListener("click", double);
+btn.split.addEventListener("click", split);
 btn.refill.addEventListener("click", () => {
   game.chips = STARTING_CHIPS;
   bet = Math.min(bet, STARTING_CHIPS);
@@ -226,7 +284,7 @@ btn.refill.addEventListener("click", () => {
   btn.deal.focus();
 });
 
-shortcuts({ n: () => void deal(), h: hit, s: stand, d: double });
+shortcuts({ n: () => void deal(), h: hit, s: stand, d: double, p: split });
 
 initReset(() => {
   remove("blackjack");
@@ -236,7 +294,15 @@ initReset(() => {
   renderControls();
 });
 
+// Pick up a round left in progress.
+const resumed = game.restore(loadRaw("blackjack-table")) && (game.phase === "player" || game.phase === "dealer");
 renderHands();
 renderControls();
 showStats();
-announce(game.chips < Math.min(...BETS) ? "You're out of chips. Refill to keep playing." : "Pick a bet and deal.");
+if (resumed && game.phase === "player") {
+  prompt("Welcome back, your hand is where you left it. ");
+} else if (resumed && game.phase === "dealer") {
+  void dealerTurn();
+} else {
+  announce(game.chips < Math.min(...BETS) ? "You're out of chips. Refill to keep playing." : "Pick a bet and deal.");
+}

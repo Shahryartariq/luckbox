@@ -64,6 +64,39 @@ export class NumberGuess {
   }
 }
 
+export interface SavedGuessGame {
+  level: string;
+  secret: number;
+  guesses: number[];
+}
+
+/** Rebuilds a saved game by replaying its guesses. Returns null for data that isn't a valid game. */
+export function restoreGame(data: unknown): NumberGuess | null {
+  const d = data as Partial<SavedGuessGame> | null;
+  if (!d || typeof d.level !== "string" || !(d.level in LEVELS) || !Array.isArray(d.guesses)) return null;
+  const level = d.level as Level;
+  const max = LEVELS[level].max;
+  if (!Number.isInteger(d.secret) || (d.secret as number) < 1 || (d.secret as number) > max) return null;
+  const secret = d.secret as number;
+  // An rng that makes randomInt(1, max) return exactly `secret`.
+  const game = new NumberGuess(level, () => (secret - 1 + 0.5) / max);
+  for (const g of d.guesses) {
+    if (typeof g !== "number" || game.validate(g)) return null;
+    game.guess(g);
+  }
+  return game;
+}
+
+export function saveGame(game: NumberGuess): SavedGuessGame {
+  return { level: game.level, secret: game.secret, guesses: game.guesses.map((g) => g.value) };
+}
+
+/** Parses what the player typed: digits only, so "1e1" or "10.0" are rejected rather than read as 10. */
+export function parseGuess(raw: string): number {
+  const t = raw.trim();
+  return /^\d{1,7}$/.test(t) ? Number(t) : NaN;
+}
+
 /** Tries a perfect binary search needs in the worst case. Shown as the target to beat. */
 export function perfectTries(max: number): number {
   return Math.ceil(Math.log2(max + 1));

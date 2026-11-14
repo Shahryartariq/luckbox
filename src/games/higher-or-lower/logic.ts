@@ -1,5 +1,5 @@
-import { type Card, type Rank, shuffledDeck } from "../../shared/cards";
-import { type Rng, cryptoRng } from "../../shared/rng";
+import { type Card, RANKS, type Rank, SUITS, createDeck, shuffledDeck } from "../../shared/cards";
+import { type Rng, cryptoRng, shuffle } from "../../shared/rng";
 
 export type Call = "higher" | "lower";
 export type CallResult = "right" | "wrong" | "tie";
@@ -50,8 +50,41 @@ export class HigherOrLower {
     return card;
   }
 
+  /** Cards the next draw can come from: the deck, or a fresh deck once it runs out. */
+  private nextPool(): Card[] {
+    if (this.deck.length > 0) return this.deck;
+    return createDeck().filter((c) => !(c.rank === this.current.rank && c.suit === this.current.suit));
+  }
+
   get odds(): Odds {
-    return odds(this.current, this.deck);
+    return odds(this.current, this.nextPool());
+  }
+
+  /** Cards left before the next reshuffle (51 right after one). */
+  get cardsLeft(): number {
+    return this.nextPool().length;
+  }
+
+  save(): { deck: Card[]; current: Card; streak: number; over: boolean; history: Card[] } {
+    return { deck: this.deck, current: this.current, streak: this.streak, over: this.over, history: this.history.slice(-8) };
+  }
+
+  /** Restores a saved run. Returns false (and changes nothing) for invalid data. */
+  restore(data: unknown): boolean {
+    const d = data as Partial<ReturnType<HigherOrLower["save"]>> | null;
+    const isCard = (x: unknown): x is Card => {
+      const c = x as Partial<Card> | null;
+      return !!c && (RANKS as readonly string[]).includes(c.rank as string) && (SUITS as readonly string[]).includes(c.suit as string);
+    };
+    if (!d || !Array.isArray(d.deck) || !d.deck.every(isCard) || d.deck.length > 51 || !isCard(d.current)) return false;
+    if (typeof d.streak !== "number" || !Number.isInteger(d.streak) || d.streak < 0 || typeof d.over !== "boolean") return false;
+    const history = Array.isArray(d.history) && d.history.every(isCard) ? d.history : [d.current];
+    this.deck = d.deck;
+    this.current = d.current;
+    this.streak = d.streak;
+    this.over = d.over;
+    this.history = history;
+    return true;
   }
 
   /** Makes a call, flips the next card and returns what happened. A tie keeps the run going. */
@@ -59,9 +92,7 @@ export class HigherOrLower {
     if (this.over) throw new Error("Run is over");
     if (this.deck.length === 0) {
       // Fresh deck without the card on the table, so the odds stay honest.
-      this.deck = shuffledDeck(1, this.rng).filter(
-        (c) => !(c.rank === this.current.rank && c.suit === this.current.suit),
-      );
+      this.deck = shuffle(this.nextPool(), this.rng);
     }
     const card = this.take();
     const diff = rankValue(card.rank) - rankValue(this.current.rank);

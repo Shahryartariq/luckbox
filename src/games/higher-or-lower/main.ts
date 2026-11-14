@@ -1,7 +1,7 @@
 import "./style.css";
 import { cardLabel, renderCard } from "../../shared/cards";
 import { $, shortcuts } from "../../shared/dom";
-import { load, remove, save } from "../../shared/storage";
+import { load, loadRaw, remove, save } from "../../shared/storage";
 import { announce, initGamePage, initReset, renderStats } from "../../shared/shell";
 import { play } from "../../shared/sound";
 import { type Call, HigherOrLower } from "./logic";
@@ -33,7 +33,7 @@ function showStats(): void {
 
 function renderBoard(deal: boolean): void {
   slot.replaceChildren(renderCard(game.current, { deal }));
-  $("cards-left").textContent = String(game.deck.length);
+  $("cards-left").textContent = String(game.cardsLeft);
   const o = game.odds;
   for (const key of ["higher", "same", "lower"] as const) {
     $(`odds-${key}`).textContent = pct(o[key]);
@@ -47,8 +47,14 @@ function renderBoard(deal: boolean): void {
   again.hidden = !game.over;
 }
 
+function persistRun(): void {
+  if (game.over) remove("higher-or-lower-run");
+  else save("higher-or-lower-run", game.save());
+}
+
 function newRun(): void {
   game = new HigherOrLower();
+  persistRun();
   renderBoard(true);
   showStats();
   announce(`${cardLabel(game.current)}. Higher or lower?`);
@@ -77,6 +83,7 @@ function call(guess: Call): void {
     play("lose");
   }
   save("higher-or-lower", stats);
+  persistRun();
   renderBoard(true);
   showStats();
   if (game.over) again.focus();
@@ -100,4 +107,13 @@ initReset(() => {
   showStats();
 });
 
-newRun();
+// Resume a run left in progress so a reload doesn't cost the streak.
+const resumed = new HigherOrLower();
+if (resumed.restore(loadRaw("higher-or-lower-run")) && !resumed.over) {
+  game = resumed;
+  renderBoard(false);
+  showStats();
+  announce(`Welcome back. Your streak of ${game.streak} is still alive. ${cardLabel(game.current)}: higher or lower?`);
+} else {
+  newRun();
+}
