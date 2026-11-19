@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Rock Paper Scissors | luckbox</title>
+    <title>Play Rock Paper Scissors free in your browser | luckbox</title>
     <meta name="description" content="The classic, played first to three against a computer that picks at random. No tricks.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/rock-paper-scissors/">
+    <link rel="canonical" href="%VITE_SITE_URL%/rock-paper-scissors/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="Rock Paper Scissors | luckbox">
+    <meta property="og:title" content="Play Rock Paper Scissors free in your browser | luckbox">
     <meta property="og:description" content="The classic, played first to three against a computer that picks at random. No tricks.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/rock-paper-scissors/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:url" content="%VITE_SITE_URL%/rock-paper-scissors/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/rock-paper-scissors.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Rock Paper Scissors in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/rock-paper-scissors/main.ts"></script>
   </head>
@@ -53,7 +57,7 @@
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Matches won</dt><dd>0</dd></div><div class="stat"><dt>Matches lost</dt><dd>0</dd></div><div class="stat"><dt>Win streak</dt><dd>0</dd></div><div class="stat"><dt>Best streak</dt><dd>0</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>

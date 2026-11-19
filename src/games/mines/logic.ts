@@ -76,6 +76,27 @@ export class MinesRound {
     return "safe";
   }
 
+  save(): { mines: number; stake: number; mineAt: number[]; revealed: number[]; status: RoundStatus; hit: number | null } {
+    return { mines: this.mines, stake: this.stake, mineAt: [...this.mineAt], revealed: [...this.revealed], status: this.status, hit: this.hit };
+  }
+
+  /** Rebuilds a round from saved data, or returns null if the data isn't a valid round. */
+  static restore(data: unknown): MinesRound | null {
+    const d = data as Partial<ReturnType<MinesRound["save"]>> | null;
+    if (!d || typeof d !== "object") return null;
+    const tiles = (x: unknown): x is number[] =>
+      Array.isArray(x) && x.every((n) => Number.isInteger(n) && n >= 0 && n < SIZE) && new Set(x).size === x.length;
+    if (typeof d.mines !== "number" || typeof d.stake !== "number" || !tiles(d.mineAt) || !tiles(d.revealed)) return null;
+    if (d.mineAt.length !== d.mines || d.revealed.some((t) => d.mineAt?.includes(t))) return null;
+    if (d.status !== "playing" && d.status !== "busted" && d.status !== "cashed") return null;
+    const round = new MinesRound(d.mines, d.stake);
+    (round as { mineAt: ReadonlySet<number> }).mineAt = new Set(d.mineAt);
+    round.revealed = new Set(d.revealed);
+    round.status = d.status;
+    round.hit = typeof d.hit === "number" ? d.hit : null;
+    return round;
+  }
+
   cashOut(): number {
     if (this.status !== "playing" || this.safeCount === 0) throw new Error("Can't cash out now");
     this.status = "cashed";

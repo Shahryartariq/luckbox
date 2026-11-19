@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>2048 | luckbox</title>
+    <title>Play 2048 free in your browser | luckbox</title>
     <meta name="description" content="Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/2048/">
+    <link rel="canonical" href="%VITE_SITE_URL%/2048/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="2048 | luckbox">
+    <meta property="og:title" content="Play 2048 free in your browser | luckbox">
     <meta property="og:description" content="Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/2048/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:url" content="%VITE_SITE_URL%/2048/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/2048.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of 2048 in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/2048/main.ts"></script>
   </head>
@@ -65,7 +69,7 @@
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Best score</dt><dd>0</dd></div><div class="stat"><dt>Biggest tile</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Games</dt><dd>0</dd></div><div class="stat"><dt>Reached 2048</dt><dd>0</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>

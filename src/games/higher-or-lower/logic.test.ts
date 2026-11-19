@@ -45,6 +45,26 @@ describe("HigherOrLower", () => {
     expect(best).toBeGreaterThan(3);
   });
 
+  it("shows real odds when the deck has run out", () => {
+    const game = new HigherOrLower(seededRng(2));
+    game.deck = [];
+    game.current = c("7");
+    expect(game.odds.higher).toBeCloseTo(28 / 51);
+    expect(game.cardsLeft).toBe(51);
+  });
+
+  it("saves and restores a run", () => {
+    const game = new HigherOrLower(seededRng(4));
+    game.call("higher");
+    const copy = new HigherOrLower(seededRng(5));
+    expect(copy.restore(JSON.parse(JSON.stringify(game.save())))).toBe(true);
+    expect(copy.current).toEqual(game.current);
+    expect(copy.deck).toEqual(game.deck);
+    expect(copy.streak).toBe(game.streak);
+    expect(copy.restore({ deck: "x" })).toBe(false);
+    expect(copy.restore({ ...game.save(), current: { rank: "1", suit: "clubs" } })).toBe(false);
+  });
+
   it("keeps going past the end of the deck", () => {
     const game = new HigherOrLower(seededRng(1));
     game.deck = [c("9")];

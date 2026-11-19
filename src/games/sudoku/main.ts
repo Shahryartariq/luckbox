@@ -1,5 +1,6 @@
 import "./style.css";
-import { $, isTyping } from "../../shared/dom";
+import { $, isTyping, makeAbandonGuard } from "../../shared/dom";
+import { randomInt } from "../../shared/rng";
 import { load, remove, save } from "../../shared/storage";
 import { announce, initGamePage, initReset, renderStats } from "../../shared/shell";
 import { play } from "../../shared/sound";
@@ -143,12 +144,20 @@ function render(): void {
   padEl.querySelectorAll<HTMLButtonElement>(".sd-key").forEach((b) => {
     const n = Number(b.dataset.n);
     const left = 9 - values.filter((v) => v === n).length;
-    b.innerHTML = `<span class="sd-key__n">${n}</span><span class="sd-key__left">${left > 0 ? left : "✓"}</span>`;
-    b.setAttribute("aria-label", `${notesMode ? "Note" : "Place"} ${n}, ${Math.max(left, 0)} left`);
+    const num = document.createElement("span");
+    num.className = "sd-key__n";
+    num.textContent = String(n);
+    const count = document.createElement("span");
+    count.className = "sd-key__left";
+    count.setAttribute("aria-hidden", "true");
+    count.textContent = left > 0 ? String(left) : "✓";
+    const sr = document.createElement("span");
+    sr.className = "visually-hidden";
+    sr.textContent = `, ${Math.max(left, 0)} left`;
+    b.replaceChildren(num, count, sr);
     b.disabled = done;
   });
   notesBtn.setAttribute("aria-pressed", String(notesMode));
-  notesBtn.setAttribute("aria-label", `Notes ${notesMode ? "on" : "off"}`);
   for (const id of ["notes", "erase", "undo", "hint"]) $<HTMLButtonElement>(id).disabled = done;
   $<HTMLButtonElement>("undo").disabled = done || history.length === 0;
   timerEl.textContent = formatTime(elapsed);
@@ -163,7 +172,9 @@ function renderLevels(): void {
       b.type = "button";
       b.textContent = LEVELS[l].label;
       b.setAttribute("aria-pressed", String(l === level));
-      b.addEventListener("click", () => newPuzzle(l));
+      b.addEventListener("click", () => {
+        if (l !== level) guard(`level-${l}`, `Press again to drop this puzzle and start a ${LEVELS[l].label.toLowerCase()} one.`, () => newPuzzle(l));
+      });
       return b;
     }),
   );
@@ -205,7 +216,10 @@ function input(n: number): void {
     return;
   }
   if (notesMode) {
-    if (values[selected]) return;
+    if (values[selected]) {
+      announce("Erase the number first to add notes to this cell.");
+      return;
+    }
     setCell(selected, 0, (notes[selected] ?? 0) ^ (1 << n));
     play("tap");
   } else {
@@ -218,7 +232,12 @@ function input(n: number): void {
 }
 
 function erase(): void {
-  if (done || puzzle[selected] !== 0 || (!values[selected] && !notes[selected])) return;
+  if (done) return;
+  if (puzzle[selected] !== 0) {
+    announce("That number is part of the puzzle and can't be erased.");
+    return;
+  }
+  if (!values[selected] && !notes[selected]) return;
   setCell(selected, 0, 0);
   afterChange();
 }
@@ -238,7 +257,7 @@ function hint(): void {
   if (puzzle[target] !== 0 || values[target] === solution[target]) {
     const open = cells.map((_, i) => i).filter((i) => values[i] !== solution[i]);
     if (open.length === 0) return;
-    target = open[Math.floor(Math.random() * open.length)] ?? target;
+    target = open[randomInt(0, open.length - 1)] ?? target;
   }
   const answer = solution[target] ?? 0;
   selected = target;
@@ -278,6 +297,10 @@ function win(): void {
   play("win");
   $("again").focus();
 }
+
+/** True once you've placed or noted anything, so starting over would lose work. */
+const hasProgress = (): boolean => !done && (values.some((v, i) => v !== 0 && puzzle[i] === 0) || notes.some(Boolean));
+const guard = makeAbandonGuard(hasProgress, (m) => announce(m, "lose"));
 
 function newPuzzle(l: Level = level): void {
   level = l;
@@ -366,7 +389,7 @@ notesBtn.addEventListener("click", () => {
 $("erase").addEventListener("click", erase);
 $("undo").addEventListener("click", undo);
 $("hint").addEventListener("click", hint);
-$("again").addEventListener("click", () => newPuzzle());
+$("again").addEventListener("click", () => guard("new", "Press New puzzle again to drop this puzzle and start a fresh one.", () => newPuzzle()));
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) persistGame();
 });

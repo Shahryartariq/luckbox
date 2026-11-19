@@ -14,7 +14,7 @@ export const GAMES: readonly GameInfo[] = [
   {
     slug: "blackjack",
     name: "Blackjack",
-    blurb: "Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.",
+    blurb: "Beat the dealer to 21. Hit, stand, double down or split, with chips that carry over between visits.",
     color: "mint",
     keys: "H hit, S stand, D double, N new hand",
   },

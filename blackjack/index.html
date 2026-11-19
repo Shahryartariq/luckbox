@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blackjack | luckbox</title>
-    <meta name="description" content="Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.">
+    <title>Play Blackjack free in your browser | luckbox</title>
+    <meta name="description" content="Beat the dealer to 21. Hit, stand, double down or split, with chips that carry over between visits.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/blackjack/">
+    <link rel="canonical" href="%VITE_SITE_URL%/blackjack/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="Blackjack | luckbox">
-    <meta property="og:description" content="Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/blackjack/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:title" content="Play Blackjack free in your browser | luckbox">
+    <meta property="og:description" content="Beat the dealer to 21. Hit, stand, double down or split, with chips that carry over between visits.">
+    <meta property="og:url" content="%VITE_SITE_URL%/blackjack/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/blackjack.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Blackjack in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/blackjack/main.ts"></script>
   </head>
@@ -27,7 +31,7 @@
     <main class="game">
       <div class="game__head">
         <h1 class="game__title">Blackjack</h1>
-        <p class="game__lede">Beat the dealer to 21. Hit, stand or double down, with chips that carry over between visits.</p>
+        <p class="game__lede">Beat the dealer to 21. Hit, stand, double down or split, with chips that carry over between visits.</p>
       </div>
       <section class="table" aria-label="Blackjack table">
         <div class="table__play" id="play">
@@ -44,7 +48,7 @@
       <p id="status" class="status" role="status" aria-live="polite"></p>
       <div class="bj-bet">
         <span class="field-label" id="bet-label">Bet</span>
-        <div id="bets" class="segmented" role="group" aria-labelledby="bet-label"></div>
+        <div id="bets" class="segmented" role="group" aria-labelledby="bet-label"><button type="button" aria-label="Bet 5 chips" aria-pressed="false">5</button><button type="button" aria-label="Bet 10 chips" aria-pressed="true">10</button><button type="button" aria-label="Bet 25 chips" aria-pressed="false">25</button><button type="button" aria-label="Bet 50 chips" aria-pressed="false">50</button></div>
         <span class="bj-chips">Chips: <strong id="chips">100</strong></span>
       </div>
       <div class="controls">
@@ -52,12 +56,13 @@
         <button id="hit" class="btn" type="button" disabled>Hit <kbd>H</kbd></button>
         <button id="stand" class="btn" type="button" disabled>Stand <kbd>S</kbd></button>
         <button id="double" class="btn" type="button" disabled>Double <kbd>D</kbd></button>
+        <button id="split" class="btn" type="button" disabled>Split <kbd>P</kbd></button>
         <button id="refill" class="btn btn--ink" type="button" hidden>Refill to 100 chips</button>
       </div>
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Chips</dt><dd>100</dd></div><div class="stat"><dt>Most chips</dt><dd>100</dd></div><div class="stat"><dt>Hands won</dt><dd>0</dd></div><div class="stat"><dt>Hands lost</dt><dd>0</dd></div><div class="stat"><dt>Pushes</dt><dd>0</dd></div><div class="stat"><dt>Blackjacks</dt><dd>0</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>
@@ -65,11 +70,11 @@
         <h2 id="howto-title">How to play</h2>
         <ul>
           <li>Pick a bet and deal. Cards are worth their number, faces are 10 and aces are 1 or 11.</li>
-          <li>Hit to take a card, stand to keep your total. Double doubles your bet for exactly one more card.</li>
+          <li>Hit to take a card, stand to keep your total. Double doubles your bet for exactly one more card. Split a pair into two hands with a second bet.</li>
           <li>The dealer draws to 17 and stands on all 17s. Blackjack pays 3 to 2.</li>
           <li>Four decks are shuffled together and reshuffled when the shoe runs low. Your chips are saved in this browser.</li>
         </ul>
-        <p class="keys">Keyboard: N deal, H hit, S stand, D double.</p>
+        <p class="keys">Keyboard: N deal, H hit, S stand, D double, P split.</p>
       </section>
       <nav class="more" aria-labelledby="more-title">
         <h2 id="more-title">More games</h2>

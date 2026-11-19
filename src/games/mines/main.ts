@@ -1,6 +1,6 @@
 import "./style.css";
 import { $, pulse, shortcuts } from "../../shared/dom";
-import { load, remove, save } from "../../shared/storage";
+import { load, loadRaw, remove, save } from "../../shared/storage";
 import { announce, initGamePage, initReset, renderStats } from "../../shared/shell";
 import { play } from "../../shared/sound";
 import { MINE_OPTIONS, MinesRound, type RoundStatus, SIZE, STAKE, STARTING_POINTS, safeChance } from "./logic";
@@ -14,6 +14,7 @@ let mines: number = (MINE_OPTIONS as readonly number[]).includes(stats.mines) ? 
 const grid = $("grid");
 const optionsBox = $("mine-options");
 const cashBtn = $<HTMLButtonElement>("cash-out");
+const cashLabel = $("cash-out-label");
 const newBtn = $<HTMLButtonElement>("new-round");
 const refillBtn = $<HTMLButtonElement>("refill");
 const multEl = $("multiplier");
@@ -37,6 +38,9 @@ function persist(): void {
   stats.mines = mines;
   stats.mostPoints = Math.max(stats.mostPoints, stats.points);
   save("mines", stats);
+  // A round with tiles flipped has its stake taken, so keep it across reloads.
+  if (round && round.status === "playing" && round.safeCount > 0) save("mines-round", round.save());
+  else remove("mines-round");
   showStats();
 }
 
@@ -120,7 +124,7 @@ function render(): void {
       nextEl.textContent = `Next tile: ${fmt(r.nextMultiplier)}, ${Math.round(safeChance(r.mines, r.safeCount) * 100)}% safe`;
     } else nextEl.textContent = "";
     cashBtn.disabled = r.status !== "playing" || r.safeCount === 0;
-    cashBtn.innerHTML = r.status === "playing" && r.safeCount > 0 ? `Cash out ${r.payout} <kbd>C</kbd>` : "Cash out <kbd>C</kbd>";
+    cashLabel.textContent = r.status === "playing" && r.safeCount > 0 ? `Cash out ${r.payout}` : "Cash out";
   }
   const broke = stats.points < STAKE && (!r || r.status !== "playing");
   refillBtn.hidden = !broke;
@@ -214,4 +218,12 @@ initReset(() => {
 
 buildGrid();
 showStats();
-startRound();
+const saved = MinesRound.restore(loadRaw("mines-round"));
+if (saved && saved.status === "playing" && saved.safeCount > 0) {
+  round = saved;
+  mines = saved.mines;
+  render();
+  announce(`Welcome back. Your round is still on at ${fmt(saved.multiplier)}, worth ${saved.payout} points.`);
+} else {
+  startRound();
+}

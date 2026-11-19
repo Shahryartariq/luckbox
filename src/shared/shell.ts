@@ -1,6 +1,4 @@
-import "@fontsource/bungee/400.css";
-import "@fontsource/atkinson-hyperlegible-next/400.css";
-import "@fontsource/atkinson-hyperlegible-next/700.css";
+import "../styles/fonts.css";
 import "../styles/base.css";
 import { $ } from "./dom";
 import { getGame } from "./games";

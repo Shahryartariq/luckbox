@@ -1,9 +1,9 @@
 import "./style.css";
-import { $, shortcuts } from "../../shared/dom";
-import { load, remove, save } from "../../shared/storage";
+import { $, makeAbandonGuard, shortcuts } from "../../shared/dom";
+import { load, loadRaw, remove, save } from "../../shared/storage";
 import { announce, initGamePage, initReset, renderStats } from "../../shared/shell";
 import { play } from "../../shared/sound";
-import { LEVELS, type Level, NumberGuess, perfectTries } from "./logic";
+import { LEVELS, type Level, NumberGuess, parseGuess, perfectTries, restoreGame, saveGame } from "./logic";
 
 initGamePage("number-guess");
 
@@ -42,7 +42,9 @@ function renderLevels(): void {
       b.type = "button";
       b.textContent = `${LEVELS[level].label}: 1 to ${LEVELS[level].max}`;
       b.setAttribute("aria-pressed", String(level === game.level));
-      b.addEventListener("click", () => start(level));
+      b.addEventListener("click", () => {
+        if (level !== game.level) guard(`level-${level}`, giveUpMessage(`switch to ${LEVELS[level].label.toLowerCase()}`), () => giveUpAnd(() => start(level)));
+      });
       return b;
     }),
   );
@@ -64,8 +66,28 @@ function render(): void {
   guessBtn.disabled = !playing;
 }
 
+const inProgress = (): boolean => game.status === "playing" && game.guesses.length > 0;
+const guard = makeAbandonGuard(inProgress, (m) => announce(m, "lose"));
+const giveUpMessage = (what: string): string => `You have a number on the go. Press again to give up (it counts as a loss) and ${what}.`;
+
+/** Starting over mid-game counts as a loss, so restarting can't dodge a bad run. */
+function giveUpAnd(next: () => void): void {
+  if (inProgress()) {
+    stats.losses++;
+    save("number-guess", stats);
+    showStats();
+  }
+  next();
+}
+
+function persistGame(): void {
+  if (game.status === "playing") save("number-guess-game", saveGame(game));
+  else remove("number-guess-game");
+}
+
 function start(level: Level): void {
   game = new NumberGuess(level);
+  remove("number-guess-game");
   stats.level = level;
   save("number-guess", stats);
   history.replaceChildren();
@@ -79,8 +101,7 @@ function start(level: Level): void {
 
 form.addEventListener("submit", (event) => {
   event.preventDefault();
-  const raw = input.value.trim();
-  const value = raw === "" ? NaN : Number(raw);
+  const value = parseGuess(input.value);
   const problem = game.validate(value);
   if (problem) {
     error.textContent = problem;
@@ -91,11 +112,7 @@ form.addEventListener("submit", (event) => {
   input.removeAttribute("aria-invalid");
   const result = game.guess(value);
 
-  const li = document.createElement("li");
-  li.dataset.result = result;
-  li.textContent = result === "correct" ? `${value} ✓` : `${value} ${result === "higher" ? "↑" : "↓"}`;
-  li.title = result === "correct" ? "Correct" : `Go ${result}`;
-  history.append(li);
+  addHistory(value, result);
 
   if (game.status === "won") {
     const used = game.guesses.length;
@@ -106,13 +123,14 @@ form.addEventListener("submit", (event) => {
     play("win");
   } else if (game.status === "lost") {
     stats.losses++;
-    announce(`Out of tries. The number was ${game.secret}.`, "lose");
+    announce(`Out of tries. The number was ${game.answer}.`, "lose");
     play("lose");
   } else {
     announce(`${value} is too ${result === "higher" ? "low. Go higher" : "high. Go lower"}.`, "info");
     play("tap");
   }
   save("number-guess", stats);
+  persistGame();
   showStats();
   render();
   input.value = "";
@@ -120,13 +138,32 @@ form.addEventListener("submit", (event) => {
   else $("again").focus();
 });
 
-$("again").addEventListener("click", () => start(game.level));
-shortcuts({ n: () => start(game.level) });
+const newNumber = (): void => guard("new", giveUpMessage("get a new number"), () => giveUpAnd(() => start(game.level)));
+$("again").addEventListener("click", newNumber);
+shortcuts({ n: newNumber });
 initReset(() => {
   remove("number-guess");
   stats = { ...DEFAULT_STATS, level: game.level };
   showStats();
 });
 
+function addHistory(value: number, result: string): void {
+  const li = document.createElement("li");
+  li.dataset.result = result;
+  li.textContent = result === "correct" ? `${value} ✓` : `${value} ${result === "higher" ? "↑" : "↓"}`;
+  li.title = result === "correct" ? "Correct" : `Go ${result}`;
+  history.append(li);
+}
+
 showStats();
-start(startLevel);
+// Pick up a number left half-guessed, so a reload can't reset your tries.
+const resumed = restoreGame(loadRaw("number-guess-game"));
+if (resumed && resumed.status === "playing") {
+  game = resumed;
+  resumed.guesses.forEach((g) => addHistory(g.value, g.result));
+  renderLevels();
+  render();
+  announce(`Welcome back. ${game.triesLeft} tries left, and it's between ${game.low} and ${game.high}.`);
+} else {
+  start(startLevel);
+}

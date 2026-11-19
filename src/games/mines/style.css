@@ -27,6 +27,8 @@
 
 .mines-grid {
   display: grid;
+  /* Square before the tiles are added, so nothing below it moves. */
+  aspect-ratio: 1;
   gap: clamp(0.4rem, 1.4vw, 0.65rem);
   width: min(100%, 26rem);
 }

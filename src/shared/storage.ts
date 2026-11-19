@@ -25,6 +25,19 @@ export function load<T extends object>(key: string, fallback: T): T {
   }
 }
 
+/**
+ * Reads saved data as-is for callers that validate it themselves (saved games
+ * check every field before use). Returns null if nothing usable is stored.
+ */
+export function loadRaw(key: string): unknown {
+  try {
+    const raw = localStorage.getItem(PREFIX + key);
+    return raw ? (JSON.parse(raw) as unknown) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function save(key: string, value: object): void {
   try {
     localStorage.setItem(PREFIX + key, JSON.stringify(value));

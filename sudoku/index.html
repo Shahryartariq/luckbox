@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sudoku | luckbox</title>
+    <title>Play Sudoku free in your browser | luckbox</title>
     <meta name="description" content="The one game here where luck can&#x27;t help you. Fresh puzzles every time, each with exactly one solution.">
     <meta name="theme-color" content="#2340d8">
-    <link rel="canonical" href="https://playluckbox.vercel.app/sudoku/">
+    <link rel="canonical" href="%VITE_SITE_URL%/sudoku/">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="luckbox">
-    <meta property="og:title" content="Sudoku | luckbox">
+    <meta property="og:title" content="Play Sudoku free in your browser | luckbox">
     <meta property="og:description" content="The one game here where luck can&#x27;t help you. Fresh puzzles every time, each with exactly one solution.">
-    <meta property="og:url" content="https://playluckbox.vercel.app/sudoku/">
-    <meta property="og:image" content="https://playluckbox.vercel.app/og.png">
+    <meta property="og:url" content="%VITE_SITE_URL%/sudoku/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/sudoku.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Sudoku in progress on luckbox">
     <meta name="twitter:card" content="summary_large_image">
     <script type="module" src="/src/games/sudoku/main.ts"></script>
   </head>
@@ -34,7 +38,7 @@
       <div class="sd-top">
         <div>
           <span class="field-label" id="level-label">Difficulty</span>
-          <div id="levels" class="segmented" role="group" aria-labelledby="level-label"></div>
+          <div id="levels" class="segmented" role="group" aria-labelledby="level-label"><button type="button" aria-pressed="true">Easy</button><button type="button" aria-pressed="false">Medium</button><button type="button" aria-pressed="false">Hard</button></div>
         </div>
         <p class="sd-timer"><span class="visually-hidden">Time: </span><span id="timer">0:00</span></p>
       </div>
@@ -57,7 +61,7 @@
         </div>
         <aside class="table__stub" aria-labelledby="stats-title">
           <h2 class="stub__title" id="stats-title">Your stats</h2>
-          <dl id="stats" class="stats"></dl>
+          <dl id="stats" class="stats"><div class="stat"><dt>Solved</dt><dd>0</dd></div><div class="stat"><dt>Best easy</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Best medium</dt><dd class="stat__text">None yet</dd></div><div class="stat"><dt>Best hard</dt><dd class="stat__text">None yet</dd></div></dl>
           <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
         </aside>
       </section>

@@ -1,8 +1,10 @@
 # luckbox
 
+[![CI](https://github.com/Shahryartariq/luckbox/actions/workflows/ci.yml/badge.svg)](https://github.com/Shahryartariq/luckbox/actions/workflows/ci.yml) [![CodeQL](https://github.com/Shahryartariq/luckbox/actions/workflows/codeql.yml/badge.svg)](https://github.com/Shahryartariq/luckbox/actions/workflows/codeql.yml)
+
 Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines**, **Higher or Lower**, **Sudoku**, **2048**, **Rock Paper Scissors** and **Number Guess**. Free, no sign-up, and your records stay in your browser.
 
-**Play it:** https://playluckbox.vercel.app
+**Play it:** https://luckbox-kappa.vercel.app
 
 ![luckbox home page](./docs/screenshots/home.png)
 
@@ -10,7 +12,7 @@ Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 
 | Game | What you do |
 | --- | --- |
-| **Blackjack** | Bet, then hit, stand or double down against a dealer who stands on 17. Four-deck shoe, blackjack pays 3 to 2, chips carry over between visits. |
+| **Blackjack** | Bet, then hit, stand, double down or split a pair against a dealer who stands on 17. Four-deck shoe, blackjack pays 3 to 2, chips carry over between visits. |
 | **Mines** | Flip tiles on a 5×5 board with 3, 5 or 10 hidden mines. Each safe tile raises a fair multiplier. Cash out before you hit a mine. |
 | **Higher or Lower** | Call the next card. The live odds come from the cards still in the deck. One wrong call ends the run. |
 | **Sudoku** | Easy, medium or hard puzzles generated in your browser, each with exactly one solution. Notes, undo, hints, clash highlighting, a timer and best times. Leave mid-puzzle and it's still there when you come back. |
@@ -32,10 +34,11 @@ Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 
 - **Keyboard play** in every game (keys are shown on the buttons), plus arrow keys to move around the Mines and Sudoku boards, and swipe to play 2048 on a phone
 - **Saved stats** per game in `localStorage`, shown on the home page tickets. Missing or broken storage never stops a game
+- **Pick up where you left off:** every game saves the round in progress, so a reload never cancels a losing hand or wipes a good run. Saved data is validated before it is used, and starting over mid-game asks first
 - **Sound effects** made with the Web Audio API, so there are no audio files to download. One toggle, remembered
 - **Accessible:** screen-reader announcements for every result, visible focus, reduced-motion support, and automated axe checks against WCAG 2.2 AA on every page
 - **Fair randomness** from `crypto.getRandomValues`, with Fisher-Yates shuffles
-- **Small:** no framework, self-hosted fonts, and under 7 KB of gzipped JavaScript per page
+- **Fast:** no framework, under 4 KB of gzipped JavaScript per game, preloaded Latin-only fonts with size-matched fallbacks (no layout shift), and Lighthouse 100 in every category on every page, checked in CI
 
 ## Tech stack
 
@@ -43,7 +46,9 @@ Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 - Vite multi-page build
 - Vitest for game rules, Playwright for browser tests on desktop and mobile, axe-core for accessibility
 - ESLint with typescript-eslint
-- GitHub Actions CI; deployed on Vercel with security headers and a strict Content Security Policy
+- GitHub Actions: lint, typecheck, unit and browser tests, `npm audit`, a Lighthouse budget, CodeQL, and Dependabot
+- Deployed on Vercel with a strict Content Security Policy and security headers (HSTS, COOP, CORP, frame and permission locks). Browser tests run against `scripts/serve.mjs`, which serves the build with the same headers, so a CSP break fails CI instead of production
+- SEO: per-page canonical URLs, Open Graph images, JSON-LD (`VideoGame`, `BreadcrumbList`, `WebSite`), a generated sitemap and robots.txt, and a web app manifest
 
 ## How it's built
 
@@ -94,7 +99,11 @@ Then open http://localhost:5173.
 | `npm run build` | Typecheck and build to `dist/` |
 | `npm test` | Run the unit tests |
 | `npm run test:e2e` | Build, serve and run the browser tests (run `npx playwright install chromium` once first) |
+| `npm run serve` | Serve `dist/` the way Vercel does (headers, redirects, 404) |
+| `npm run lighthouse` | Run the Lighthouse budget on every page (needs Chrome) |
 | `npm run check` | Lint, typecheck, unit tests and build |
+
+The public address used for canonical URLs, the sitemap and social images comes from `VITE_SITE_URL` (default `https://luckbox-kappa.vercel.app`).
 
 ## Author
 

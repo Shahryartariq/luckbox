@@ -40,6 +40,7 @@ describe("rules", () => {
     expect(settle(hand("10", "8"), hand("10", "6", "9"))).toBe("win");
     expect(settle(hand("10", "8"), hand("10", "8"))).toBe("push");
     expect(settle(hand("10", "7"), hand("10", "8"))).toBe("lose");
+    expect(settle(hand("A", "K"), hand("10", "9"), true)).toBe("win");
   });
 
   it("blackjack pays 3 to 2", () => {
@@ -51,19 +52,24 @@ describe("rules", () => {
 });
 
 describe("Blackjack game", () => {
-  it("plays hands to the end and keeps chips consistent", () => {
+  const playOut = (game: Blackjack): void => {
+    while (game.phase === "player") {
+      if (handValue(game.player).total < 17) game.hit();
+      else game.stand();
+    }
+    while (game.phase === "dealer") game.dealerStep();
+  };
+
+  it("plays rounds to the end and keeps chips consistent", () => {
     const game = new Blackjack(1000, seededRng(42));
     for (let i = 0; i < 300; i++) {
       const before = game.chips;
       game.deal(10);
-      while (game.phase === "player") {
-        if (handValue(game.player).total < 17) game.hit();
-        else game.stand();
-      }
-      while (game.phase === "dealer") game.dealerStep();
+      if (game.canSplit() && i % 2 === 0) game.split();
+      playOut(game);
       expect(game.phase).toBe("done");
-      expect(game.outcome).not.toBeNull();
-      expect(game.chips - before).toBe(payout(game.outcome!, game.bet));
+      expect(game.hands.every((h) => h.outcome !== null)).toBe(true);
+      expect(game.chips - before).toBe(game.net);
     }
   });
 
@@ -76,8 +82,8 @@ describe("Blackjack game", () => {
     } while (game.phase !== "player" && tries < 50);
     expect(game.canDouble()).toBe(true);
     game.double();
-    expect(game.player).toHaveLength(3);
-    expect(game.bet).toBe(20);
+    expect(game.hands[0]!.cards).toHaveLength(3);
+    expect(game.hands[0]!.bet).toBe(20);
     expect(["dealer", "done"]).toContain(game.phase);
   });
 
@@ -95,5 +101,93 @@ describe("Blackjack game", () => {
       while (game.phase === "dealer") game.dealerStep();
       expect(game.cardsLeft).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("split", () => {
+  /** A game whose shoe deals these cards in order: you, dealer, you, dealer, then hits. */
+  function rigged(ranks: Rank[], chips = 100): Blackjack {
+    const game = new Blackjack(chips, seededRng(1));
+    // draw() takes from the end of the shoe, so the first card goes last. 60 filler cards keep it above the reshuffle point.
+    const filler = hand(...(Array(60).fill("2") as Rank[]));
+    game.restore({ phase: "betting", hands: [], active: 0, dealer: [], shoe: [...filler, ...hand(...ranks).reverse()] });
+    return game;
+  }
+
+  it("splits a pair into two hands that play in turn", () => {
+    const game = rigged(["8", "10", "8", "7", "3", "K"]);
+    game.deal(10);
+    expect(game.canSplit()).toBe(true);
+    game.split();
+    expect(game.hands).toHaveLength(2);
+    expect(game.hands.map((h) => h.cards.map((c) => c.rank))).toEqual([["8", "3"], ["8", "K"]]);
+    expect(game.active).toBe(0);
+    game.stand();
+    expect(game.active).toBe(1);
+    game.stand();
+    expect(game.phase).toBe("dealer");
+    while (game.phase === "dealer") game.dealerStep();
+    expect(game.hands.map((h) => h.outcome)).toEqual(["lose", "win"]);
+    expect(game.chips).toBe(100);
+  });
+
+  it("needs a pair and enough chips, and only once", () => {
+    const game = rigged(["8", "10", "9", "7"]);
+    game.deal(10);
+    expect(game.canSplit()).toBe(false);
+    const poor = rigged(["8", "10", "8", "7"], 15);
+    poor.deal(10);
+    expect(poor.canSplit()).toBe(false);
+    const tens = rigged(["K", "10", "Q", "7", "2", "3"]);
+    tens.deal(10);
+    expect(tens.canSplit()).toBe(true);
+    tens.split();
+    expect(tens.canSplit()).toBe(false);
+  });
+
+  it("split aces get one card each and 21 is not blackjack", () => {
+    const game = rigged(["A", "10", "A", "7", "K", "5"]);
+    game.deal(10);
+    game.split();
+    expect(game.hands.every((h) => h.done && h.cards.length === 2)).toBe(true);
+    expect(game.phase).toBe("dealer");
+    while (game.phase === "dealer") game.dealerStep();
+    expect(game.hands[0]!.outcome).toBe("win");
+    expect(game.net).toBe(10 + payout(game.hands[1]!.outcome!, 10));
+  });
+
+  it("you can double after splitting", () => {
+    const game = rigged(["5", "10", "5", "7", "6", "9", "K", "2"]);
+    game.deal(10);
+    game.split();
+    expect(game.canDouble()).toBe(true);
+    game.double();
+    expect(game.hands[0]!.bet).toBe(20);
+    expect(game.active).toBe(1);
+  });
+});
+
+describe("save and restore", () => {
+  it("resumes a hand mid-round", () => {
+    const game = new Blackjack(100, seededRng(8));
+    let tries = 0;
+    do game.deal(10);
+    while (game.phase !== "player" && ++tries < 50);
+    const saved = JSON.parse(JSON.stringify(game.save()));
+    const again = new Blackjack(100, seededRng(99));
+    expect(again.restore(saved)).toBe(true);
+    expect(again.phase).toBe("player");
+    expect(again.player).toEqual(game.player);
+    expect(again.dealer).toEqual(game.dealer);
+    expect(again.cardsLeft).toBe(game.cardsLeft);
+  });
+
+  it("rejects broken data", () => {
+    const game = new Blackjack(100, seededRng(8));
+    expect(game.restore(null)).toBe(false);
+    expect(game.restore({ phase: "player", hands: [], active: 0, dealer: [], shoe: [] })).toBe(false);
+    expect(game.restore({ phase: "nope", hands: [], active: 0, dealer: [], shoe: [] })).toBe(false);
+    expect(game.restore({ phase: "player", hands: [{ cards: [{ rank: "Z", suit: "spades" }], bet: 10 }], active: 0, dealer: [], shoe: [] })).toBe(false);
+    expect(game.restore({ phase: "player", hands: [{ cards: [], bet: -5 }], active: 0, dealer: [], shoe: [] })).toBe(false);
   });
 });

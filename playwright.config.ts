@@ -18,8 +18,9 @@ export default defineConfig({
     { name: "desktop", use: { ...devices["Desktop Chrome"], launchOptions } },
     { name: "mobile", use: { ...devices["Pixel 7"], launchOptions } },
   ],
+  // Serve the build the way Vercel does (headers, CSP, redirects, 404), so tests catch policy problems.
   webServer: {
-    command: "npm run build && npm run preview",
+    command: "npm run build && node scripts/serve.mjs",
     url: "http://localhost:4173",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
