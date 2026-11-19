@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Shahryartariq/luckbox/actions/workflows/ci.yml/badge.svg)](https://github.com/Shahryartariq/luckbox/actions/workflows/ci.yml) [![CodeQL](https://github.com/Shahryartariq/luckbox/actions/workflows/codeql.yml/badge.svg)](https://github.com/Shahryartariq/luckbox/actions/workflows/codeql.yml)
 
-Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines**, **Higher or Lower**, **Sudoku**, **2048**, **Rock Paper Scissors** and **Number Guess**. Free, no sign-up, and your records stay in your browser.
+Eight quick browser games, from pure luck to pure logic: **Blackjack**, **Mines**, **Higher or Lower**, **Sudoku**, **2048**, **Tic Tac Toe**, **Rock Paper Scissors** and **Number Guess**. Free, no sign-up, and your records stay in your browser.
 
 **Play it:** https://luckbox-kappa.vercel.app
 
@@ -17,6 +17,7 @@ Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 | **Higher or Lower** | Call the next card. The live odds come from the cards still in the deck. One wrong call ends the run. |
 | **Sudoku** | Easy, medium or hard puzzles generated in your browser, each with exactly one solution. Notes, undo, hints, clash highlighting, a timer and best times. Leave mid-puzzle and it's still there when you come back. |
 | **2048** | Slide and merge tiles with the arrow keys, WASD, a swipe or the on-screen arrows. Smooth slide and merge animations, best score and biggest tile saved, and your game resumes where you left it. |
+| **Tic Tac Toe** | Play a friend on one screen, or the computer on easy, medium or unbeatable (perfect minimax play, so the best you can do is a draw). Who starts switches every game. Keyboard: 1 to 9 or the arrow keys. |
 | **Rock Paper Scissors** | First to three wins the match. Win streaks are tracked. |
 | **Number Guess** | Easy (1–20), Normal (1–100) or Hard (1–1000). A range bar shows what is still possible after each guess. |
 
@@ -27,8 +28,8 @@ Seven quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 | ![Higher or Lower](./docs/screenshots/higher-or-lower.png) | ![Rock Paper Scissors](./docs/screenshots/rock-paper-scissors.png) |
 | **Sudoku** | **2048** |
 | ![Sudoku](./docs/screenshots/sudoku.png) | ![2048](./docs/screenshots/2048.png) |
-| **Number Guess** | |
-| ![Number Guess](./docs/screenshots/number-guess.png) | |
+| **Tic Tac Toe** | **Number Guess** |
+| ![Tic Tac Toe](./docs/screenshots/tic-tac-toe.png) | ![Number Guess](./docs/screenshots/number-guess.png) |
 
 ## Features
 
@@ -62,6 +63,7 @@ src/
 │   ├── higher-or-lower/
 │   ├── sudoku/
 │   ├── 2048/
+│   ├── tic-tac-toe/
 │   ├── rock-paper-scissors/
 │   └── number-guess/
 ├── shared/                 # cards, randomness, storage, sound, page shell
@@ -78,6 +80,7 @@ Some of what the tests check:
 - Higher or Lower: the odds match a hand count of the deck
 - Sudoku: every generated puzzle has exactly one solution and the right number of clues
 - 2048: merges happen once per tile per move in every direction, and the score always equals the sum of merges
+- Tic Tac Toe: the unbeatable level is checked against every possible game you could play, whoever starts, and never loses
 - In the browser: a full match or hand of every game, accessibility, no sideways scrolling on phones, and no console errors
 
 ## Run it locally

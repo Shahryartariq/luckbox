@@ -28,7 +28,7 @@ function structuredData(slug: string | null): object[] {
         "@type": "WebSite",
         name: "luckbox",
         url: `${SITE_URL}/`,
-        description: "Seven quick browser games, from pure luck to pure logic. Free, no sign-up.",
+        description: "Eight quick browser games, from pure luck to pure logic. Free, no sign-up.",
         inLanguage: "en",
         author: AUTHOR,
       },

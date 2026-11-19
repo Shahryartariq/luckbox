@@ -10,6 +10,7 @@
         "http://localhost:4173/higher-or-lower/",
         "http://localhost:4173/sudoku/",
         "http://localhost:4173/2048/",
+        "http://localhost:4173/tic-tac-toe/",
         "http://localhost:4173/rock-paper-scissors/",
         "http://localhost:4173/number-guess/"
       ],

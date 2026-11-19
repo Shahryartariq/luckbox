@@ -1,0 +1,113 @@
+.ttt-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ttt-turn {
+  min-height: 1.5em;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.ttt-turn[data-mark="O"] {
+  color: var(--lose);
+}
+
+.ttt-board {
+  display: grid;
+  gap: clamp(6px, 1.6vw, 10px);
+  width: min(100%, 24rem);
+  /* Square before the cells are added, so nothing below it moves. */
+  aspect-ratio: 1;
+  padding: clamp(6px, 1.6vw, 10px);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  background: var(--ink);
+}
+
+.ttt-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(6px, 1.6vw, 10px);
+}
+
+.ttt-gridcell {
+  display: contents;
+}
+
+.ttt-cell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 10px;
+  background: var(--paper);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.ttt-cell:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 45%, #fff);
+}
+
+.ttt-cell:disabled {
+  cursor: default;
+}
+
+.ttt-cell:focus-visible {
+  outline: 3px solid var(--sun);
+  outline-offset: -5px;
+}
+
+/* X: two bars. O: a ring. Drawn with CSS so they scale crisply. */
+.ttt-cell[data-mark="X"]::before,
+.ttt-cell[data-mark="X"]::after {
+  content: "";
+  position: absolute;
+  inset: 22% 46%;
+  border-radius: 999px;
+  background: var(--ink);
+  animation: ttt-draw 180ms ease-out;
+}
+
+.ttt-cell[data-mark="X"]::before {
+  transform: rotate(45deg);
+}
+
+.ttt-cell[data-mark="X"]::after {
+  transform: rotate(-45deg);
+}
+
+.ttt-cell[data-mark="O"]::before {
+  content: "";
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  border: clamp(6px, 2.4vw, 10px) solid var(--lose);
+  animation: ttt-pop 180ms ease-out;
+}
+
+.ttt-cell[data-win="true"] {
+  background: var(--sun);
+}
+
+.ttt-board[data-over="true"] .ttt-cell[data-win="false"] {
+  opacity: 0.55;
+}
+
+@keyframes ttt-draw {
+  from {
+    opacity: 0;
+    inset: 46%;
+  }
+}
+
+@keyframes ttt-pop {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}

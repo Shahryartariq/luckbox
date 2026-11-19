@@ -5,7 +5,7 @@ export interface GameInfo {
   /** One sentence for the home page ticket. */
   blurb: string;
   /** Ticket colour token from tokens.css. */
-  color: "sun" | "pink" | "mint" | "sky" | "lilac" | "peach" | "lime";
+  color: "sun" | "pink" | "mint" | "sky" | "lilac" | "peach" | "lime" | "aqua";
   /** Short label for the controls, e.g. "R, P, S". */
   keys: string;
 }
@@ -45,6 +45,13 @@ export const GAMES: readonly GameInfo[] = [
     blurb: "Slide the tiles and merge equal numbers. New tiles drop in at random, so plan ahead and reach 2048.",
     color: "lime",
     keys: "Arrows or WASD to slide, N new game",
+  },
+  {
+    slug: "tic-tac-toe",
+    name: "Tic Tac Toe",
+    blurb: "The classic three in a row. Play a friend, or the computer on easy, medium or unbeatable. Can you hold it to a draw?",
+    color: "aqua",
+    keys: "1 to 9 place, arrows move, N new game",
   },
   {
     slug: "rock-paper-scissors",
