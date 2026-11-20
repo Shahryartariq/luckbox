@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Play Tic Tac Toe free in your browser | luckbox</title>
+    <meta name="description" content="The classic three in a row. Play a friend, or the computer on easy, medium or unbeatable. Can you hold it to a draw?">
+    <meta name="theme-color" content="#2340d8">
+    <link rel="canonical" href="%VITE_SITE_URL%/tic-tac-toe/">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="luckbox">
+    <meta property="og:title" content="Play Tic Tac Toe free in your browser | luckbox">
+    <meta property="og:description" content="The classic three in a row. Play a friend, or the computer on easy, medium or unbeatable. Can you hold it to a draw?">
+    <meta property="og:url" content="%VITE_SITE_URL%/tic-tac-toe/">
+    <meta property="og:image" content="%VITE_SITE_URL%/og/tic-tac-toe.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A game of Tic Tac Toe in progress on luckbox">
+    <meta name="twitter:card" content="summary_large_image">
+    <script type="module" src="/src/games/tic-tac-toe/main.ts"></script>
+  </head>
+  <body data-color="aqua">
+    <a class="skip" href="#play">Skip to the game</a>
+    <header class="topbar">
+      <a class="wordmark" href="/">luckbox</a>
+      <button id="sound-toggle" class="chip" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <main class="game">
+      <div class="game__head">
+        <h1 class="game__title">Tic Tac Toe</h1>
+        <p class="game__lede">The classic three in a row. Play a friend, or the computer on easy, medium or unbeatable. Can you hold it to a draw?</p>
+      </div>
+      <section class="table" aria-label="Tic Tac Toe table">
+        <div class="table__play" id="play">
+      <div class="ttt-top">
+        <div>
+          <span class="field-label" id="level-label">Opponent</span>
+          <div id="levels" class="segmented" role="group" aria-labelledby="level-label"><button type="button" aria-pressed="false">Easy</button><button type="button" aria-pressed="true">Medium</button><button type="button" aria-pressed="false">Unbeatable</button><button type="button" aria-pressed="false">Two players</button></div>
+        </div>
+        <p class="ttt-turn" id="turn" aria-hidden="true"></p>
+      </div>
+      <div id="board" class="ttt-board" role="grid" aria-label="Tic Tac Toe board, 3 by 3"></div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div class="controls">
+        <button id="again" class="btn btn--ink" type="button"><span id="again-label">New game</span> <kbd>N</kbd></button>
+      </div>
+        </div>
+        <aside class="table__stub" aria-labelledby="stats-title">
+          <h2 class="stub__title" id="stats-title">Your stats</h2>
+          <dl id="stats" class="stats"><div class="stat"><dt>Wins</dt><dd>0</dd></div><div class="stat"><dt>Losses</dt><dd>0</dd></div><div class="stat"><dt>Draws</dt><dd>0</dd></div><div class="stat"><dt>Best streak</dt><dd>0</dd></div></dl>
+          <button id="reset-stats" class="link-btn" type="button">Reset stats</button>
+        </aside>
+      </section>
+      <section class="howto" aria-labelledby="howto-title">
+        <h2 id="howto-title">How to play</h2>
+        <ul>
+          <li>Take turns placing X and O. Three in a row, column or diagonal wins.</li>
+          <li>You are X. Against the computer, who goes first switches every game.</li>
+          <li>Easy plays at random, medium blocks your wins most of the time, and unbeatable plays perfectly: the best you can do is a draw.</li>
+          <li>Two players share one screen. Your game is saved if you leave.</li>
+        </ul>
+        <p class="keys">Keyboard: 1 to 9 place a mark (top left to bottom right), arrow keys move, N for a new game.</p>
+      </section>
+      <nav class="more" aria-labelledby="more-title">
+        <h2 id="more-title">More games</h2>
+        <ul>
+          <li><a href="/blackjack/" data-color="mint">Blackjack</a></li>
+          <li><a href="/mines/" data-color="pink">Mines</a></li>
+          <li><a href="/higher-or-lower/" data-color="sun">Higher or Lower</a></li>
+          <li><a href="/sudoku/" data-color="peach">Sudoku</a></li>
+          <li><a href="/2048/" data-color="lime">2048</a></li>
+          <li><a href="/rock-paper-scissors/" data-color="sky">Rock Paper Scissors</a></li>
+          <li><a href="/number-guess/" data-color="lilac">Number Guess</a></li>
+        </ul>
+      </nav>
+    </main>
+    <footer class="site-footer">
+      <p>Made by <a href="https://github.com/Shahryartariq">Shehryar Tariq</a>. <a href="https://github.com/Shahryartariq/luckbox">Source code on GitHub</a>.</p>
+    </footer>
+  </body>
+</html>

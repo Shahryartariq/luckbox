@@ -33,6 +33,10 @@ const lines: Record<string, () => string | null> = {
     const s = load("2048", { bestScore: 0, bestTile: 0 });
     return s.bestScore === 0 ? null : `Best ${s.bestScore}, biggest tile ${s.bestTile}`;
   },
+  "tic-tac-toe": () => {
+    const s = load("tic-tac-toe", { wins: 0, losses: 0, draws: 0 });
+    return s.wins + s.losses + s.draws === 0 ? null : `${plural(s.wins, "win")}, ${plural(s.draws, "draw")}`;
+  },
   "rock-paper-scissors": () => {
     const s = load("rock-paper-scissors", { matchesWon: 0, matchesLost: 0 });
     return s.matchesWon + s.matchesLost === 0 ? null : `${s.matchesWon} of ${s.matchesWon + s.matchesLost} matches won`;

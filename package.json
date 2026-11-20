@@ -2,7 +2,7 @@
   "name": "luckbox",
   "version": "2.1.0",
   "private": true,
-  "description": "Seven browser games, from pure luck to pure logic: Blackjack, Mines, Higher or Lower, Sudoku, 2048, Rock Paper Scissors and Number Guess.",
+  "description": "Eight browser games, from pure luck to pure logic: Blackjack, Mines, Higher or Lower, Sudoku, 2048, Tic Tac Toe, Rock Paper Scissors and Number Guess.",
   "license": "MIT",
   "type": "module",
   "engines": {

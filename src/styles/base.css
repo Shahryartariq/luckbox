@@ -17,6 +17,7 @@
   --lilac: #cdbbff;
   --peach: #ffbe8a;
   --lime: #c6ef6b;
+  --aqua: #7fe0e6;
 
   --win: #0a7a4b;
   --lose: #c81e35;
@@ -42,6 +43,7 @@ body[data-color="sky"] { --accent: var(--sky); }
 body[data-color="lilac"] { --accent: var(--lilac); }
 body[data-color="peach"] { --accent: var(--peach); }
 body[data-color="lime"] { --accent: var(--lime); }
+body[data-color="aqua"] { --accent: var(--aqua); }
 
 *,
 *::before,
@@ -609,6 +611,7 @@ button {
 .more a[data-color="lilac"] { --chip: var(--lilac); }
 .more a[data-color="peach"] { --chip: var(--peach); }
 .more a[data-color="lime"] { --chip: var(--lime); }
+.more a[data-color="aqua"] { --chip: var(--aqua); }
 
 .site-footer {
   max-width: 72rem;

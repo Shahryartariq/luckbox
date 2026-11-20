@@ -1,7 +1,7 @@
 {
   "name": "luckbox",
   "short_name": "luckbox",
-  "description": "Seven quick browser games, from pure luck to pure logic.",
+  "description": "Eight quick browser games, from pure luck to pure logic.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
