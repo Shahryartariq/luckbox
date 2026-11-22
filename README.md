@@ -43,7 +43,7 @@ Eight quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 
 ## Tech stack
 
-- TypeScript (strict), no UI framework
+- TypeScript (strict), no UI framework. Type-checked with the native TypeScript 7 compiler; ESLint uses TypeScript 5.9 for its parser until typescript-eslint supports 7
 - Vite multi-page build
 - Vitest for game rules, Playwright for browser tests on desktop and mobile, axe-core for accessibility
 - ESLint with typescript-eslint
