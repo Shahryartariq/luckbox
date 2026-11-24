@@ -22,7 +22,7 @@
 .mines-meter__next {
   min-height: 1.4em;
   font-size: 0.9375rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .mines-grid {
@@ -47,7 +47,7 @@
   border: 2px solid var(--ink);
   border-radius: 12px;
   background: var(--accent);
-  box-shadow: 0 4px 0 var(--ink);
+  box-shadow: 0 4px 0 var(--shadow);
   font-size: clamp(1.25rem, 5vw, 1.75rem);
   cursor: pointer;
   transition:
@@ -62,7 +62,7 @@
 
 .tile:active:not(:disabled) {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--ink);
+  box-shadow: 0 1px 0 var(--shadow);
 }
 
 .tile:disabled {
@@ -70,22 +70,22 @@
 }
 
 .tile[data-state="gem"] {
-  background: #fff;
+  background: var(--surface-2);
   color: var(--win);
-  box-shadow: 0 1px 0 var(--ink);
+  box-shadow: 0 1px 0 var(--shadow);
   transform: translateY(3px);
   animation: tile-pop 220ms ease-out;
 }
 
 .tile[data-state="mine"] {
-  background: #fff;
+  background: var(--surface-2);
   color: var(--lose);
   box-shadow: none;
   opacity: 0.7;
 }
 
 .tile[data-state="boom"] {
-  background: var(--lose);
+  background: #c81e35;
   color: #fff;
   box-shadow: none;
   transform: translateY(3px);

@@ -6,7 +6,7 @@
   background:
     radial-gradient(120% 90% at 50% 0%, rgb(255 255 255 / 0.1), transparent 60%),
     #0f6b4a;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   color: #fff;
 }
 

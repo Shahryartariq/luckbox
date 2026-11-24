@@ -20,7 +20,7 @@
 .hl-left {
   margin-top: 0.75rem;
   font-size: 0.875rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   max-width: 9rem;
 }
 
@@ -42,10 +42,10 @@
 
 .hl-odd__bar {
   height: 1.1rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: 999px;
   overflow: hidden;
-  background: #fff;
+  background: var(--surface-2);
 }
 
 .hl-odd__bar span {

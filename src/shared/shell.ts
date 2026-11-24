@@ -3,11 +3,18 @@ import "../styles/base.css";
 import { $ } from "./dom";
 import { getGame } from "./games";
 import { isSoundOn, onSoundChange, setSound } from "./sound";
+import { initThemeSwitch } from "./theme";
 
 /** Shared setup for every game page. */
 export function initGamePage(slug: string): void {
   const game = getGame(slug);
   document.body.dataset.color = game.color;
+  initTopbar();
+}
+
+/** The theme switch and sound toggle shared by every page. */
+export function initTopbar(): void {
+  initThemeSwitch();
   initSoundToggle();
 }
 

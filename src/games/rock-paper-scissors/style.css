@@ -9,7 +9,7 @@
 .rps-name {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--ink-soft);
+  color: var(--text-soft);
   margin-bottom: 0.5rem;
 }
 
@@ -20,8 +20,8 @@
   aspect-ratio: 1;
   margin: 0 auto;
   border-radius: 50%;
-  border: 3px solid var(--ink);
-  background: #fff;
+  border: 3px solid var(--edge);
+  background: var(--surface-2);
   font-size: clamp(2.75rem, 11vw, 4.5rem);
   line-height: 1;
   transition: background-color 200ms ease;
@@ -36,11 +36,11 @@
 }
 
 .rps-hand[data-result="lose"] {
-  background: #ffd5db;
+  background: var(--danger-soft);
 }
 
 .rps-hand[data-result="draw"] {
-  background: #eceefa;
+  background: var(--surface-3);
 }
 
 .rps-hand.shake {
@@ -70,7 +70,7 @@
 
 .rps-dash {
   margin: 0 0.15em;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .rps-log {
@@ -84,20 +84,21 @@
 .rps-log li {
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   font-size: 0.9375rem;
 }
 
 .rps-log li[data-result="win"] {
   background: var(--mint);
+  color: var(--ink);
 }
 
 .rps-log li[data-result="lose"] {
-  background: #ffd5db;
+  background: var(--danger-soft);
 }
 
 .rps-log li[data-result="draw"] {
-  background: #eceefa;
+  background: var(--surface-3);
 }
 
 @media (max-width: 480px) {

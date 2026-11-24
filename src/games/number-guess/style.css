@@ -12,16 +12,16 @@
   min-width: 0;
   min-height: 3rem;
   padding: 0.5rem 0.9rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-btn);
-  background: #fff;
-  color: var(--ink);
+  background: var(--surface-2);
+  color: var(--text);
   font-family: var(--font-display);
   font-size: 1.5rem;
 }
 
 .ng-input:focus-visible {
-  outline: 3px solid var(--ink);
+  outline: 3px solid var(--text);
   outline-offset: 2px;
 }
 
@@ -40,9 +40,9 @@
 .ng-track {
   position: relative;
   height: 1.25rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: 999px;
-  background: repeating-linear-gradient(90deg, #eceefa 0 6px, #fff 6px 12px);
+  background: repeating-linear-gradient(90deg, var(--surface-3) 0 6px, var(--surface-2) 6px 12px);
   overflow: hidden;
 }
 
@@ -51,8 +51,8 @@
   top: 0;
   bottom: 0;
   background: var(--accent);
-  border-left: 2px solid var(--ink);
-  border-right: 2px solid var(--ink);
+  border-left: 2px solid var(--edge);
+  border-right: 2px solid var(--edge);
   transition:
     left 300ms ease,
     width 300ms ease;
@@ -63,7 +63,7 @@
 }
 
 #ng-window[data-state="lost"] {
-  background: #ffd5db;
+  background: var(--danger-soft);
 }
 
 .ng-ends {
@@ -71,15 +71,15 @@
   justify-content: space-between;
   margin-top: 0.25rem;
   font-size: 0.875rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .ng-info {
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .ng-info strong {
-  color: var(--ink);
+  color: var(--text);
 }
 
 .ng-history {
@@ -92,7 +92,7 @@
 
 .ng-history li {
   padding: 0.2rem 0.65rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: 999px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -100,6 +100,7 @@
 
 .ng-history li[data-result="correct"] {
   background: var(--mint);
+  color: var(--ink);
 }
 
 .ng-history:empty {

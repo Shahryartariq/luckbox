@@ -8,6 +8,13 @@ Eight quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 
 ![luckbox home page](./docs/screenshots/home.png)
 
+<details>
+<summary>Dark mode</summary>
+
+![Sudoku in dark mode](./docs/screenshots/dark-mode.png)
+
+</details>
+
 ## The games
 
 | Game | What you do |
@@ -36,6 +43,7 @@ Eight quick browser games, from pure luck to pure logic: **Blackjack**, **Mines*
 - **Keyboard play** in every game (keys are shown on the buttons), plus arrow keys to move around the Mines and Sudoku boards, and swipe to play 2048 on a phone
 - **Saved stats** per game in `localStorage`, shown on the home page tickets. Missing or broken storage never stops a game
 - **Pick up where you left off:** every game saves the round in progress, so a reload never cancels a losing hand or wipes a good run. Saved data is validated before it is used, and starting over mid-game asks first
+- **Dark mode** with an Auto / Light / Dark switch on every page. Auto follows the device setting live, a manual choice is remembered and syncs across open tabs, and a tiny script applies it before the first paint so pages never flash the wrong colours. Both themes pass the same WCAG 2.2 AA contrast checks
 - **Sound effects** made with the Web Audio API, so there are no audio files to download. One toggle, remembered
 - **Accessible:** screen-reader announcements for every result, visible focus, reduced-motion support, and automated axe checks against WCAG 2.2 AA on every page
 - **Fair randomness** from `crypto.getRandomValues`, with Fisher-Yates shuffles
@@ -66,8 +74,8 @@ src/
 │   ├── tic-tac-toe/
 │   ├── rock-paper-scissors/
 │   └── number-guess/
-├── shared/                 # cards, randomness, storage, sound, page shell
-├── styles/base.css         # design tokens and shared components
+├── shared/                 # cards, randomness, storage, sound, theme, page shell
+├── styles/base.css         # design tokens (light and dark) and shared components
 └── home/                   # home page
 tests/e2e/                  # Playwright tests that play every game
 ```

@@ -12,7 +12,7 @@
   font-size: clamp(4.25rem, 17vw, 11rem);
   line-height: 0.9;
   color: var(--sun);
-  text-shadow: 0.05em 0.05em 0 var(--ink);
+  text-shadow: 0.05em 0.05em 0 var(--shadow);
   letter-spacing: -0.01em;
 }
 
@@ -61,7 +61,7 @@
   color: var(--ink);
   text-decoration: none;
   transform: rotate(var(--tilt));
-  box-shadow: 0 6px 0 var(--ink);
+  box-shadow: 0 6px 0 var(--shadow);
   border: 2px solid var(--ink);
   transition:
     transform 160ms ease,
@@ -71,12 +71,12 @@
 .ticket__link:hover,
 .ticket__link:focus-visible {
   transform: rotate(0) translateY(-4px);
-  box-shadow: 0 10px 0 var(--ink);
+  box-shadow: 0 10px 0 var(--shadow);
 }
 
 .ticket__link:active {
   transform: rotate(0) translateY(2px);
-  box-shadow: 0 3px 0 var(--ink);
+  box-shadow: 0 3px 0 var(--shadow);
 }
 
 .ticket__body {
@@ -124,7 +124,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: var(--cobalt);
+  background: var(--page);
   border: 2px solid var(--ink);
 }
 
