@@ -16,14 +16,14 @@
   display: grid;
   min-width: 5.5rem;
   padding: 0.4rem 0.9rem 0.5rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-btn);
-  background: #fff;
+  background: var(--surface-2);
 }
 
 .g2-score__label {
   font-size: 0.875rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .g2-score__value {
@@ -46,7 +46,7 @@
   width: 100%;
   aspect-ratio: 1;
   padding: var(--gap);
-  border: 3px solid var(--ink);
+  border: 3px solid var(--edge);
   border-radius: 16px;
   background: var(--ink);
   touch-action: none;
@@ -54,7 +54,7 @@
 }
 
 .g2-board:focus-visible {
-  outline: 3px solid var(--ink);
+  outline: 3px solid var(--text);
   outline-offset: 4px;
 }
 
@@ -87,7 +87,7 @@
 .g2-tile {
   --r: 0;
   --c: 0;
-  --bg: var(--paper);
+  --bg: #fbfbff;
   --fg: var(--ink);
   position: absolute;
   top: 0;
@@ -112,7 +112,7 @@
 .g2-tile[data-digits="5"] { font-size: clamp(0.85rem, 3.9vw, 1.4rem); }
 
 /* Values climb through the ticket colours; 2048 turns ink black. */
-.g2-tile[data-value="2"] { --bg: var(--paper); }
+.g2-tile[data-value="2"] { --bg: #fbfbff; }
 .g2-tile[data-value="4"] { --bg: #e9e2ff; }
 .g2-tile[data-value="8"] { --bg: var(--sky); }
 .g2-tile[data-value="16"] { --bg: var(--mint); }
@@ -161,11 +161,12 @@
   gap: 1rem;
   padding: 1rem;
   border-radius: 13px;
-  background: rgb(251 251 255 / 0.82);
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
   text-align: center;
 }
 
 .g2-overlay p {
+  color: var(--text);
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 7vw, 2.75rem);
   line-height: 1.1;
@@ -174,6 +175,10 @@
 
 .g2-board[data-state="win"] .g2-overlay {
   background: rgb(255 210 63 / 0.92);
+}
+
+.g2-board[data-state="win"] .g2-overlay p {
+  color: var(--ink);
 }
 
 /* On-screen arrows for mouse and switch users. */

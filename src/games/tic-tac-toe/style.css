@@ -23,9 +23,9 @@
   /* Square before the cells are added, so nothing below it moves. */
   aspect-ratio: 1;
   padding: clamp(6px, 1.6vw, 10px);
-  border: 3px solid var(--ink);
+  border: 3px solid var(--edge);
   border-radius: 16px;
-  background: var(--ink);
+  background: var(--edge);
 }
 
 .ttt-row {
@@ -44,13 +44,13 @@
   aspect-ratio: 1;
   border: none;
   border-radius: 10px;
-  background: var(--paper);
+  background: var(--surface-2);
   cursor: pointer;
   transition: background-color 120ms ease;
 }
 
 .ttt-cell:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--accent) 45%, #fff);
+  background: color-mix(in srgb, var(--accent) 45%, var(--surface-2));
 }
 
 .ttt-cell:disabled {
@@ -69,7 +69,7 @@
   position: absolute;
   inset: 22% 46%;
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--text);
   animation: ttt-draw 180ms ease-out;
 }
 

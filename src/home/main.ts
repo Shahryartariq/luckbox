@@ -1,8 +1,8 @@
 import "./home.css";
-import { initSoundToggle } from "../shared/shell";
+import { initTopbar } from "../shared/shell";
 import { load } from "../shared/storage";
 
-initSoundToggle();
+initTopbar();
 
 const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
 

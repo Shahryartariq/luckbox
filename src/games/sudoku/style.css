@@ -22,10 +22,10 @@
 
 .sd-board {
   display: grid;
-  border: 3px solid var(--ink);
+  border: 3px solid var(--edge);
   border-radius: 12px;
   overflow: hidden;
-  background: var(--ink);
+  background: var(--edge);
   gap: 1px;
   width: 100%;
   aspect-ratio: 1;
@@ -47,8 +47,8 @@
   aspect-ratio: 1;
   border: none;
   padding: 0;
-  background: #fff;
-  color: #1f4fd8;
+  background: var(--surface-2);
+  color: var(--entry);
   font-family: var(--font-display);
   font-size: clamp(1.05rem, 4.6vw, 1.75rem);
   line-height: 1;
@@ -59,32 +59,32 @@
 
 /* Thicker lines between the 3x3 boxes. */
 .sd-cell--box-right {
-  box-shadow: 2px 0 0 var(--ink);
+  box-shadow: 2px 0 0 var(--edge);
   z-index: 1;
 }
 
 .sd-cell--box-bottom {
-  box-shadow: 0 2px 0 var(--ink);
+  box-shadow: 0 2px 0 var(--edge);
   z-index: 1;
 }
 
 .sd-cell--box-right.sd-cell--box-bottom {
   box-shadow:
-    2px 0 0 var(--ink),
-    0 2px 0 var(--ink),
-    2px 2px 0 var(--ink);
+    2px 0 0 var(--edge),
+    0 2px 0 var(--edge),
+    2px 2px 0 var(--edge);
 }
 
 .sd-cell.is-given {
-  color: var(--ink);
+  color: var(--text);
 }
 
 .sd-cell.is-peer {
-  background: color-mix(in srgb, var(--accent) 22%, #fff);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface-2));
 }
 
 .sd-cell.is-same {
-  background: color-mix(in srgb, var(--accent) 60%, #fff);
+  background: color-mix(in srgb, var(--accent) 60%, var(--surface-2));
 }
 
 .sd-cell.is-selected {
@@ -97,13 +97,13 @@
 }
 
 .sd-cell:focus-visible {
-  outline: 3px solid var(--ink);
+  outline: 3px solid var(--text);
   outline-offset: -3px;
   z-index: 2;
 }
 
 .sd-board[data-done="true"] .sd-cell {
-  background: color-mix(in srgb, var(--mint) 45%, #fff);
+  background: color-mix(in srgb, var(--mint) 45%, var(--surface-2));
   cursor: default;
 }
 
@@ -116,7 +116,7 @@
   font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(0.45rem, 1.5vw, 0.7rem);
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .sd-notes span {
@@ -140,22 +140,22 @@
   justify-items: center;
   gap: 0.1rem;
   padding: 0.45rem 0 0.35rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-btn);
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 0 3px 0 var(--ink);
+  background: var(--surface-2);
+  color: var(--text);
+  box-shadow: 0 3px 0 var(--shadow);
   cursor: pointer;
   touch-action: manipulation;
 }
 
 .sd-key:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--accent) 45%, #fff);
+  background: color-mix(in srgb, var(--accent) 45%, var(--surface-2));
 }
 
 .sd-key:active:not(:disabled) {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--ink);
+  box-shadow: 0 1px 0 var(--shadow);
 }
 
 .sd-key:disabled {
@@ -171,7 +171,7 @@
 
 .sd-key__left {
   font-size: 0.75rem;
-  color: var(--ink-soft);
+  color: var(--text-soft);
 }
 
 .sd-tools {
@@ -187,8 +187,13 @@
 }
 
 #notes[aria-pressed="true"] {
-  background: var(--ink);
-  color: #fff;
+  --btn-bg: var(--strong);
+  --btn-fg: var(--on-strong);
+}
+
+/* On a ticket-coloured cell, numbers need the dark ink in both themes. */
+.sd-cell.is-selected {
+  color: var(--ink);
 }
 
 @media (max-width: 480px) {

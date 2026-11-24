@@ -23,6 +23,22 @@
   --lose: #c81e35;
   --push: #5b6085;
 
+  /* Theme tokens. Light values here; dark values in :root[data-theme="dark"].
+     --ink stays dark in both themes: it is the text colour on ticket colours and on cards. */
+  --page: var(--cobalt);
+  --surface: #fbfbff;
+  --surface-2: #fff;
+  --surface-3: #eceefa;
+  --text: #141a3a;
+  --text-soft: #4a5078;
+  --edge: #141a3a;
+  --shadow: #141a3a;
+  --strong: #141a3a;
+  --on-strong: #fff;
+  --on-accent: #141a3a;
+  --entry: #1f4fd8;
+  --danger-soft: #ffd5db;
+
   --accent: var(--sun);
 
   --font-display: "Bungee", "Bungee Fallback", "Arial Black", sans-serif;
@@ -34,6 +50,26 @@
   --notch: 13px;
 
   color-scheme: light;
+}
+
+/* Dark theme: a deep navy counter, dark tickets, light text. Set before first paint by /theme.js. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0c1236;
+  --surface: #161d47;
+  --surface-2: #1f2758;
+  --surface-3: #2b346b;
+  --text: #eef0ff;
+  --text-soft: #b3b9e0;
+  --edge: #7b84c4;
+  --shadow: #03051a;
+  --strong: #eef0ff;
+  --on-strong: #141a3a;
+  --entry: #9db8ff;
+  --danger-soft: #5b2133;
+  --win: #63e2ab;
+  --lose: #ff8a9a;
+  --push: #b9bee3;
 }
 
 body[data-color="sun"] { --accent: var(--sun); }
@@ -58,7 +94,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--cobalt);
+  background: var(--page);
   color: #fff;
   font-family: var(--font-body);
   font-size: 1.0625rem;
@@ -89,9 +125,8 @@ button {
   outline-offset: 3px;
 }
 
-.table :focus-visible,
-.howto :focus-visible {
-  outline-color: var(--ink);
+.table :focus-visible {
+  outline-color: var(--text);
 }
 
 [hidden] {
@@ -167,6 +202,46 @@ button {
   border-style: dashed;
 }
 
+.topbar__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Auto / Light / Dark: three icon buttons in one pill, the chosen one filled. */
+.theme-switch {
+  display: inline-flex;
+  padding: 2px;
+  border: 2px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+}
+
+.theme-switch button {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 1.9rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: rgb(255 255 255 / 0.8);
+  cursor: pointer;
+}
+
+.theme-switch button:hover {
+  color: #fff;
+  background: rgb(255 255 255 / 0.14);
+}
+
+.theme-switch button[aria-pressed="true"] {
+  background: #fff;
+  color: var(--page);
+}
+
+.theme-switch button:focus-visible {
+  outline-offset: 1px;
+}
+
 /* ---------- Game page ---------- */
 
 .game {
@@ -201,10 +276,10 @@ button {
 .table {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 15rem;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--surface);
+  color: var(--text);
   border-radius: var(--radius-ticket);
-  box-shadow: 0 18px 40px -18px rgb(8 14 60 / 0.6);
+  box-shadow: 0 18px 40px -18px rgb(3 5 26 / 0.6);
 }
 
 .table__play {
@@ -218,6 +293,7 @@ button {
 .table__stub {
   position: relative;
   background: var(--accent);
+  color: var(--on-accent);
   border-radius: 0 var(--radius-ticket) var(--radius-ticket) 0;
   border-left: 3px dashed rgb(20 26 58 / 0.35);
   padding: 1.5rem 1.25rem;
@@ -235,7 +311,7 @@ button {
   width: calc(var(--notch) * 2);
   height: calc(var(--notch) * 2);
   border-radius: 50%;
-  background: var(--cobalt);
+  background: var(--page);
 }
 
 .table__stub::before {
@@ -330,7 +406,7 @@ button {
   font-weight: 700;
   font-size: clamp(1.1875rem, 2.6vw, 1.4375rem);
   line-height: 1.3;
-  color: var(--ink);
+  color: var(--text);
   max-width: 40rem;
 }
 
@@ -355,20 +431,21 @@ button {
 }
 
 .btn {
-  --btn-bg: var(--paper);
+  --btn-bg: var(--surface-2);
+  --btn-fg: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   min-height: 3rem;
   padding: 0.6rem 1.3rem;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-btn);
   background: var(--btn-bg);
-  color: var(--ink);
+  color: var(--btn-fg);
   font-weight: 700;
   font-size: 1.0625rem;
-  box-shadow: 0 4px 0 var(--ink);
+  box-shadow: 0 4px 0 var(--shadow);
   cursor: pointer;
   transition:
     transform 80ms ease,
@@ -384,26 +461,28 @@ button {
 
 .btn:active:not(:disabled) {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--ink);
+  box-shadow: 0 1px 0 var(--shadow);
 }
 
 .btn:disabled {
   cursor: not-allowed;
   opacity: 0.4;
-  box-shadow: 0 2px 0 var(--ink);
+  box-shadow: 0 2px 0 var(--shadow);
 }
 
 .btn--primary {
   --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+  border-color: var(--ink);
 }
 
 .btn--ink {
-  --btn-bg: var(--ink);
-  color: #fff;
+  --btn-bg: var(--strong);
+  --btn-fg: var(--on-strong);
 }
 
 .btn--ink:hover:not(:disabled) {
-  background: #2a3266;
+  background: color-mix(in srgb, var(--strong) 82%, var(--page));
 }
 
 .btn kbd {
@@ -426,15 +505,16 @@ button {
 .segmented {
   display: inline-flex;
   flex-wrap: wrap;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--edge);
   border-radius: var(--radius-btn);
   overflow: hidden;
 }
 
 .segmented button {
   border: none;
-  border-right: 2px solid var(--ink);
-  background: var(--paper);
+  border-right: 2px solid var(--edge);
+  background: var(--surface-2);
+  color: var(--text);
   padding: 0.45rem 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -446,8 +526,8 @@ button {
 }
 
 .segmented button[aria-pressed="true"] {
-  background: var(--ink);
-  color: #fff;
+  background: var(--strong);
+  color: var(--on-strong);
 }
 
 .segmented button:disabled {
@@ -479,11 +559,11 @@ button {
   background: #fff;
   color: var(--ink);
   font-weight: 700;
-  box-shadow: 0 3px 0 var(--ink);
+  box-shadow: 0 3px 0 var(--shadow);
 }
 
 .card--red {
-  color: var(--lose);
+  color: #c81e35;
 }
 
 .card__corner {

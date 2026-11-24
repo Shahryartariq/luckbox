@@ -29,3 +29,19 @@ a {
   text-decoration: none;
   box-shadow: 0 4px 0 #141a3a;
 }
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="dark"] body {
+  background: #0c1236;
+}
+
+:root[data-theme="dark"] h1 {
+  text-shadow: 0.05em 0.05em 0 #03051a;
+}
+
+:root[data-theme="dark"] a {
+  box-shadow: 0 4px 0 #03051a;
+}
